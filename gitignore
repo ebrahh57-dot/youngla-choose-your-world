@@ -1,0 +1,32 @@
+# === Sistema / editores ===
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.tmp
+*~
+*.log
+
+# === Dependencias y builds de la web (03-web) ===
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+.output/
+.cache/
+.parcel-cache/
+.vite/
+.svelte-kit/
+coverage/
+
+# === Variables de entorno ===
+.env
+.env.*
+!.env.example
+
+# === Material pesado: se conserva en local, NO se sube al repositorio ===
+# (comenta este bloque si quieres versionar todo en GitHub)
+04-recursos/**
+!04-recursos/.gitkeep
+05-entregables/**
+!05-entregables/.gitkeep
