@@ -27,31 +27,28 @@ function initDesktop() {
   const container = document.getElementById("canvas-root");
   if (!container) return;
 
-  const hud = document.querySelector<HTMLElement>("[data-world-hud]");
+  const editorialOverlay = document.querySelector<HTMLElement>("[data-editorial-overlay]");
+  const flagshipPrompt = document.querySelector<HTMLElement>("[data-flagship-prompt]");
   const hudFranchise = document.querySelector<HTMLElement>("[data-hud-franchise]");
   const hudTitle = document.querySelector<HTMLElement>("[data-hud-title]");
   const hudTagline = document.querySelector<HTMLElement>("[data-hud-tagline]");
-  const hudGarment = document.querySelector<HTMLElement>("[data-hud-garment]");
-  const hudPrice = document.querySelector<HTMLElement>("[data-hud-price]");
-  const hudGarmentImg = document.querySelector<HTMLImageElement>("[data-hud-garment-img]");
   const hudCta = document.querySelector<HTMLElement>("[data-hud-cta]");
-  const hero = document.querySelector<HTMLElement>("[data-hero]");
-  const kickers = document.querySelectorAll<HTMLElement>("[data-kicker]");
   const worldBar = document.querySelector<HTMLElement>("[data-world-bar]");
+  const campaignMarks = document.querySelectorAll<HTMLElement>(".campaign-mark");
 
   let activeHoveredWorld: World | null = null;
   let lastFocusedWorld: World | null = null;
-  let isMouseOverHud = false;
+  let isMouseOverOverlay = false;
   let isMouseOverBar = false;
 
-  const canClearHover = () => !isMouseOverHud && !isMouseOverBar;
+  const canClearHover = () => !isMouseOverOverlay && !isMouseOverBar;
 
-  function closeHudIfIdle() {
-    if (!isMouseOverHud && !isMouseOverBar && !activeHoveredWorld) {
-      hud?.classList.remove("is-visible");
-      hero?.style.setProperty("opacity", "1");
-      document.querySelectorAll<HTMLElement>(".world-pill").forEach((pill) => {
-        pill.classList.remove("is-active");
+  function closeOverlayIfIdle() {
+    if (!isMouseOverOverlay && !isMouseOverBar && !activeHoveredWorld) {
+      editorialOverlay?.classList.remove("is-visible");
+      flagshipPrompt?.classList.remove("is-dimmed");
+      document.querySelectorAll<HTMLElement>(".editorial-ticker-item").forEach((item) => {
+        item.classList.remove("is-active");
       });
     }
   }
@@ -65,27 +62,21 @@ function initDesktop() {
           lastFocusedWorld = world;
         }
 
-        if (!hud) return;
+        if (!editorialOverlay) return;
 
         if (world) {
           if (hudFranchise) hudFranchise.textContent = world.franchise;
           if (hudTitle) hudTitle.textContent = world.name;
           if (hudTagline) hudTagline.textContent = world.tagline;
-          if (hudGarment) hudGarment.textContent = world.garment;
-          if (hudPrice) hudPrice.textContent = world.price;
-          if (hudGarmentImg && world.garmentImgUrl) {
-            hudGarmentImg.src = world.garmentImgUrl;
-            hudGarmentImg.alt = world.garment;
-          }
-          hud.style.setProperty("--hud-accent", world.accent);
-          hud.classList.add("is-visible");
-          hero?.style.setProperty("opacity", "0.25");
+          editorialOverlay.style.setProperty("--hud-accent", world.accent);
+          editorialOverlay.classList.add("is-visible");
+          flagshipPrompt?.classList.add("is-dimmed");
 
-          document.querySelectorAll<HTMLElement>(".world-pill").forEach((pill) => {
-            pill.classList.toggle("is-active", pill.dataset.slug === world.slug);
+          document.querySelectorAll<HTMLElement>(".editorial-ticker-item").forEach((item) => {
+            item.classList.toggle("is-active", item.dataset.slug === world.slug);
           });
-        } else if (!isMouseOverHud && !isMouseOverBar) {
-          closeHudIfIdle();
+        } else if (!isMouseOverOverlay && !isMouseOverBar) {
+          closeOverlayIfIdle();
         }
       },
       (world: World) => {
@@ -102,58 +93,59 @@ function initDesktop() {
       canClearHover
     );
 
-    // Keep HUD open when mouse enters it
-    if (hud) {
-      hud.addEventListener("mouseenter", () => {
-        isMouseOverHud = true;
+    // Keep overlay active if mouse moves directly onto it
+    if (editorialOverlay) {
+      editorialOverlay.addEventListener("mouseenter", () => {
+        isMouseOverOverlay = true;
       });
-      hud.addEventListener("mouseleave", () => {
-        isMouseOverHud = false;
-        window.setTimeout(closeHudIfIdle, 350);
+      editorialOverlay.addEventListener("mouseleave", () => {
+        isMouseOverOverlay = false;
+        window.setTimeout(closeOverlayIfIdle, 350);
       });
     }
 
-    // Wire up HUD CTA click
-    hudCta?.addEventListener("click", () => {
+    // Wire up CTA link click
+    hudCta?.addEventListener("click", (e) => {
+      e.preventDefault();
       const targetWorld = activeHoveredWorld || lastFocusedWorld || WORLDS[0];
       if (targetWorld) {
         enterWorldBySlug(targetWorld.slug);
       }
     });
 
-    // Populate bottom world switcher bar
+    // Populate bottom world ticker
     if (worldBar) {
       worldBar.addEventListener("mouseenter", () => {
         isMouseOverBar = true;
       });
       worldBar.addEventListener("mouseleave", () => {
         isMouseOverBar = false;
-        window.setTimeout(closeHudIfIdle, 350);
+        window.setTimeout(closeOverlayIfIdle, 350);
       });
 
-      worldBar.innerHTML = WORLDS.map(
-        (w) => `<button type="button" class="world-pill" data-slug="${w.slug}" style="--pill-accent: ${w.accent}">
-          <span class="world-pill-dot"></span>
-          <span class="world-pill-text">${w.name}</span>
-        </button>`
-      ).join("");
+      worldBar.innerHTML = WORLDS.map((w, idx) => `
+        <button type="button" class="editorial-ticker-item" data-slug="${w.slug}" style="--item-accent: ${w.accent}">
+          ${w.name}
+        </button>
+        ${idx < WORLDS.length - 1 ? '<span class="editorial-ticker-sep">·</span>' : ''}
+      `).join("");
 
-      worldBar.querySelectorAll<HTMLElement>(".world-pill").forEach((pill) => {
-        const slug = pill.dataset.slug!;
-        pill.addEventListener("mouseenter", () => focusWorldBySlug(slug));
-        pill.addEventListener("click", () => enterWorldBySlug(slug));
+      worldBar.querySelectorAll<HTMLElement>(".editorial-ticker-item").forEach((item) => {
+        const slug = item.dataset.slug!;
+        item.addEventListener("mouseenter", () => focusWorldBySlug(slug));
+        item.addEventListener("click", () => enterWorldBySlug(slug));
       });
     }
 
     window.addEventListener("beforeunload", dispose, { once: true });
 
-    gsap.timeline({ delay: 1.8 }).to(
-      [hero?.querySelector(".hero-wordmark"), hero?.querySelector(".hero-tagline"), hero?.querySelector(".hero-sub")],
-      { opacity: 1, duration: 1.2, stagger: 0.15, ease: "power3.out" }
-    );
-    gsap.to(kickers, { opacity: 1, duration: 1.0, delay: 2.2, stagger: 0.08, ease: "power3.out" });
+    // Staggered intro for subtle editorial UI marks
+    gsap.to(campaignMarks, { opacity: 0.55, duration: 1.2, delay: 3.2, stagger: 0.1, ease: "power2.out" });
     if (worldBar) {
-      gsap.to(worldBar, { opacity: 1, duration: 1.0, delay: 2.4, ease: "power3.out" });
+      gsap.to(worldBar, { opacity: 1, duration: 1.2, delay: 3.6, ease: "power2.out" });
+    }
+    if (flagshipPrompt) {
+      gsap.to(flagshipPrompt, { opacity: 1, duration: 1.2, delay: 3.8, ease: "power2.out" });
     }
   });
 }

@@ -33,51 +33,41 @@
     </nav>
     <div class="nav-right">
       <button type="button" id="sound-btn" class="nav-sound-btn" aria-label="Toggle Sound">SOUND [OFF]</button>
-      <button type="button" aria-label="Search">SEARCH</button>
-      <button type="button" aria-label="Account">ACCOUNT</button>
-      <button type="button" id="nav-cart-btn" aria-label="Cart">CART (<span id="cart-count">0</span>)</button>
+      <button type="button" id="nav-cart-btn" aria-label="Cart">BAG (<span id="cart-count">0</span>)</button>
     </div>
   </header>
 
   <main id="main-content">
     <!-- Desktop / capable-device: immersive WebGL rotunda -->
-    <section id="experience" class="experience" aria-label="Choose your world — interactive experience">
+    <section id="experience" class="experience" aria-label="YoungLA Choose Your World Flagship">
       <div id="canvas-root" class="canvas-root"></div>
 
-      <p class="corner-kicker corner-kicker--tl" data-kicker>DISCIPLINE<br />CREATES<br />FREEDOM</p>
-      <p class="corner-kicker corner-kicker--tr" data-kicker>MORE<br />THAN<br />CLOTHING</p>
+      <span class="campaign-mark campaign-mark--tl">YOUNGLA FLAGSHIP</span>
+      <span class="campaign-mark campaign-mark--tr">AUTUMN 2026 // 07 WORLDS</span>
 
-      <div class="hero-copy" data-hero>
-        <h1 class="hero-wordmark" aria-hidden="true">YOUNGLA</h1>
-        <p class="hero-tagline">CHOOSE<br />YOUR WORLD</p>
-        <p class="hero-sub">Explore the worlds behind YoungLA.</p>
+      <h2 class="sr-only">Explore YoungLA's collaboration worlds</h2>
+
+      <!-- Floating Editorial Typography Overlay -->
+      <div class="editorial-overlay" data-editorial-overlay aria-live="polite">
+        <div class="editorial-inner">
+          <span class="editorial-franchise" data-hud-franchise>COLLABORATION</span>
+          <h2 class="editorial-title" data-hud-title>WORLD NAME</h2>
+          <p class="editorial-tagline" data-hud-tagline>Atmospheric description of this YoungLA world.</p>
+          <button type="button" class="editorial-cta" data-hud-cta>
+            <span class="editorial-cta-text">ENTER WORLD</span>
+            <span class="editorial-cta-arrow">→</span>
+          </button>
+        </div>
       </div>
 
-      <h2 class="sr-only">Explore YoungLA's collaborations</h2>
-
-      <!-- Rich Interactive World HUD -->
-      <div class="world-hud" data-world-hud aria-live="polite">
-        <div class="world-hud-badge">
-          <span class="world-hud-franchise" data-hud-franchise>FRANCHISE</span>
-          <span class="world-hud-pill">SPECIAL COLLABORATION</span>
-        </div>
-        <h2 class="world-hud-title" data-hud-title>WORLD NAME</h2>
-        <p class="world-hud-tagline" data-hud-tagline>World Tagline</p>
-        <div class="world-hud-product-row">
-          <img class="world-hud-garment-thumb" data-hud-garment-img src="" alt="YoungLA Signature Garment" />
-          <div class="world-hud-product-info">
-            <span class="world-hud-garment" data-hud-garment>FEATURED GARMENT</span>
-            <span class="world-hud-price" data-hud-price>$120</span>
-          </div>
-        </div>
-        <button type="button" class="world-hud-cta" data-hud-cta>ENTER WORLD →</button>
+      <!-- Ambient Flagship Prompt (Visible when resting) -->
+      <div class="flagship-prompt is-visible" data-flagship-prompt>
+        <span class="flagship-prompt-tag">YOUNGLA DIGITAL FLAGSHIP</span>
+        <span class="flagship-prompt-title">CHOOSE YOUR WORLD</span>
       </div>
 
-      <!-- Quick World Selector Bar -->
-      <nav class="world-selector-bar" aria-label="Quick World Selector" data-world-bar></nav>
-
-      <p class="corner-kicker corner-kicker--bl" data-kicker>WORLDWIDE SHIPPING</p>
-      <p class="corner-kicker corner-kicker--br" data-kicker>BUILT BY A<br />DIFFERENT GENERATION</p>
+      <!-- Editorial World Index Ticker -->
+      <nav class="editorial-ticker" data-world-bar aria-label="Collaboration Worlds"></nav>
     </section>
 
     <!-- Mobile / reduced-capability fallback: vertical world list -->
