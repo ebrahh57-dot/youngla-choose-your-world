@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>YOUNGLA — Choose Your World</title>
+  <meta name="description" content="YoungLA is more than clothing. Choose your world — enter the collaborations that built the brand." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader" aria-hidden="true">
+    <span class="loader-mark">YOUNGLA</span>
+    <div class="loader-bar"><span id="loader-fill"></span></div>
+    <span class="loader-sub">CHOOSE YOUR WORLD</span>
+  </div>
+
+  <div id="wipe" aria-hidden="true"></div>
+
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="site-nav" data-nav>
+    <a class="nav-logo" href="/">YOUNGLA</a>
+    <nav class="nav-center" aria-label="Primary">
+      <a href="#men">MEN</a>
+      <a href="#women">WOMEN</a>
+      <a href="#collections">COLLECTIONS</a>
+      <a href="#worlds" class="is-active">COLLABS</a>
+      <a href="#community">COMMUNITY</a>
+    </nav>
+    <div class="nav-right">
+      <button type="button" id="sound-btn" class="nav-sound-btn" aria-label="Toggle Sound">SOUND [OFF]</button>
+      <button type="button" aria-label="Search">SEARCH</button>
+      <button type="button" aria-label="Account">ACCOUNT</button>
+      <button type="button" id="nav-cart-btn" aria-label="Cart">CART (<span id="cart-count">0</span>)</button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Desktop / capable-device: immersive WebGL rotunda -->
+    <section id="experience" class="experience" aria-label="Choose your world — interactive experience">
+      <div id="canvas-root" class="canvas-root"></div>
+
+      <p class="corner-kicker corner-kicker--tl" data-kicker>DISCIPLINE<br />CREATES<br />FREEDOM</p>
+      <p class="corner-kicker corner-kicker--tr" data-kicker>MORE<br />THAN<br />CLOTHING</p>
+
+      <div class="hero-copy" data-hero>
+        <h1 class="hero-wordmark" aria-hidden="true">YOUNGLA</h1>
+        <p class="hero-tagline">CHOOSE<br />YOUR WORLD</p>
+        <p class="hero-sub">Explore the worlds behind YoungLA.</p>
+      </div>
+
+      <h2 class="sr-only">Explore YoungLA's collaborations</h2>
+
+      <!-- Rich Interactive World HUD -->
+      <div class="world-hud" data-world-hud aria-live="polite">
+        <div class="world-hud-badge">
+          <span class="world-hud-franchise" data-hud-franchise>FRANCHISE</span>
+          <span class="world-hud-pill">SPECIAL COLLABORATION</span>
+        </div>
+        <h2 class="world-hud-title" data-hud-title>WORLD NAME</h2>
+        <p class="world-hud-tagline" data-hud-tagline>World Tagline</p>
+        <div class="world-hud-product-row">
+          <span class="world-hud-garment" data-hud-garment>FEATURED GARMENT</span>
+          <span class="world-hud-price" data-hud-price>$120</span>
+        </div>
+        <button type="button" class="world-hud-cta" data-hud-cta>ENTER WORLD →</button>
+      </div>
+
+      <!-- Quick World Selector Bar -->
+      <nav class="world-selector-bar" aria-label="Quick World Selector" data-world-bar></nav>
+
+      <p class="corner-kicker corner-kicker--bl" data-kicker>WORLDWIDE SHIPPING</p>
+      <p class="corner-kicker corner-kicker--br" data-kicker>BUILT BY A<br />DIFFERENT GENERATION</p>
+    </section>
+
+    <!-- Mobile / reduced-capability fallback: vertical world list -->
+    <section id="mobile-worlds" class="mobile-worlds" aria-label="Choose your world">
+      <div class="mobile-hero">
+        <div class="mobile-hero-figure" aria-hidden="true"></div>
+        <h1 class="hero-wordmark">YOUNGLA</h1>
+        <p class="hero-tagline">CHOOSE<br />YOUR WORLD</p>
+        <p class="hero-sub">Explore the worlds behind YoungLA.</p>
+      </div>
+      <ul class="world-list" data-world-list></ul>
+    </section>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

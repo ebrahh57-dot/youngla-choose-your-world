@@ -1,0 +1,22 @@
+{
+  "name": "youngla-web",
+  "private": true,
+  "version": "0.1.0",
+  "description": "YoungLA — Choose Your World. EHT Labs.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "gsap": "^3.12.7",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.169.0",
+    "playwright": "^1.63.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}
