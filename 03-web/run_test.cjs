@@ -1,5 +1,7 @@
 const { chromium } = require('playwright');
 
+const BASE_URL = process.argv[2] || 'http://localhost:5173/';
+
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -12,8 +14,8 @@ const { chromium } = require('playwright');
     console.error('[PAGE ERROR]:', err);
   });
 
-  console.log('1. Navigating to homepage...');
-  await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+  console.log('1. Navigating to homepage:', BASE_URL);
+  await page.goto(BASE_URL, { waitUntil: 'networkidle' });
   await page.waitForTimeout(3000);
 
   // Take resting homepage screenshot
@@ -60,7 +62,7 @@ const { chromium } = require('playwright');
   // Test mobile view
   console.log('8. Testing mobile view...');
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('http://localhost:5173/');
+  await page.goto(BASE_URL);
   await page.waitForTimeout(2000);
   await page.screenshot({ path: 'C:/Users/ebrah/.gemini/antigravity/brain/e940c4d9-e1fa-4f25-922d-c0f3267bfd20/test_mobile_view.png' });
   console.log('9. Mobile view captured.');

@@ -125,6 +125,55 @@
 .collection-frame-corner--bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
 .collection-frame-corner--br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
 
+.collection-thumb-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.collection-thumb-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(18, 18, 22, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-cinematic);
+}
+.collection-thumb-btn:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(25, 25, 32, 0.85);
+}
+.collection-thumb-btn.is-active {
+  border-color: var(--world-accent, #fff);
+  background: rgba(30, 30, 40, 0.9);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+.collection-thumb-img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 2px;
+  background: #000;
+}
+.collection-thumb-title {
+  font-family: var(--font-ui);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: var(--color-white);
+  text-transform: uppercase;
+}
+.other-world-garment-sub {
+  font-size: 0.62rem;
+  color: rgba(235, 235, 240, 0.7);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Right: Details Panel */
 .collection-details-panel {
   display: flex;

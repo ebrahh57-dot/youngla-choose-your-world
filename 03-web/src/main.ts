@@ -33,6 +33,7 @@ function initDesktop() {
   const hudTagline = document.querySelector<HTMLElement>("[data-hud-tagline]");
   const hudGarment = document.querySelector<HTMLElement>("[data-hud-garment]");
   const hudPrice = document.querySelector<HTMLElement>("[data-hud-price]");
+  const hudGarmentImg = document.querySelector<HTMLImageElement>("[data-hud-garment-img]");
   const hudCta = document.querySelector<HTMLElement>("[data-hud-cta]");
   const hero = document.querySelector<HTMLElement>("[data-hero]");
   const kickers = document.querySelectorAll<HTMLElement>("[data-kicker]");
@@ -72,6 +73,10 @@ function initDesktop() {
           if (hudTagline) hudTagline.textContent = world.tagline;
           if (hudGarment) hudGarment.textContent = world.garment;
           if (hudPrice) hudPrice.textContent = world.price;
+          if (hudGarmentImg && world.garmentImgUrl) {
+            hudGarmentImg.src = world.garmentImgUrl;
+            hudGarmentImg.alt = world.garment;
+          }
           hud.style.setProperty("--hud-accent", world.accent);
           hud.classList.add("is-visible");
           hero?.style.setProperty("opacity", "0.25");

@@ -19,10 +19,12 @@ export interface World {
   printTag: string;
   accent: string;
   secondaryAccent: string;
-  /** Angle offset (degrees) around the rotunda, 0 = center. */
-  angle: number;
+  angle?: number;
+  /** Normalized X position across the concept image (-1 on left to +1 on right) */
+  xNorm: number;
   crestShape: CrestShape;
   assetUrl: string;
+  garmentImgUrl: string;
   colors: WorldColor[];
 }
 
@@ -50,8 +52,10 @@ export const WORLDS: World[] = [
     accent: "#38bdf8",
     secondaryAccent: "#1e293b",
     angle: -56,
+    xNorm: -0.78,
     crestShape: "bat",
     assetUrl: `${base}assets/worlds/batman.png`,
+    garmentImgUrl: `${base}assets/garments/batman_garment.png`,
     colors: [
       { name: "Gotham Black", hex: "#0b0c10" },
       { name: "Shadow Charcoal", hex: "#1f242d" },
@@ -79,8 +83,10 @@ export const WORLDS: World[] = [
     accent: "#ef4444",
     secondaryAccent: "#991b1b",
     angle: -36,
+    xNorm: -0.52,
     crestShape: "vought",
     assetUrl: `${base}assets/worlds/the-boys.png`,
+    garmentImgUrl: `${base}assets/garments/the_boys_garment.png`,
     colors: [
       { name: "Compound Red", hex: "#b91c1c" },
       { name: "Vought Obsidian", hex: "#09090b" },
@@ -108,8 +114,10 @@ export const WORLDS: World[] = [
     accent: "#10b981",
     secondaryAccent: "#065f46",
     angle: -18,
+    xNorm: -0.28,
     crestShape: "katana",
     assetUrl: `${base}assets/worlds/demon-slayer.png`,
+    garmentImgUrl: `${base}assets/garments/demon_slayer_garment.png`,
     colors: [
       { name: "Nichirin Emerald", hex: "#065f46" },
       { name: "Demon Raven", hex: "#0f172a" },
@@ -137,8 +145,10 @@ export const WORLDS: World[] = [
     accent: "#ffffff",
     secondaryAccent: "#64748b",
     angle: 0,
+    xNorm: 0.0,
     crestShape: "hexagon",
     assetUrl: `${base}assets/worlds/youngla-originals.png`,
+    garmentImgUrl: `${base}assets/garments/youngla_originals_garment.png`,
     colors: [
       { name: "Washed Mineral Black", hex: "#18181b" },
       { name: "Brutalist Bone", hex: "#e2e8f0" },
@@ -166,8 +176,10 @@ export const WORLDS: World[] = [
     accent: "#84cc16",
     secondaryAccent: "#3f6212",
     angle: 18,
+    xNorm: 0.28,
     crestShape: "wings",
     assetUrl: `${base}assets/worlds/attack-on-titan.png`,
+    garmentImgUrl: `${base}assets/garments/attack_on_titan_garment.png`,
     colors: [
       { name: "Scout Military Olive", hex: "#365314" },
       { name: "Wall Rose Stone", hex: "#1c1917" },
@@ -195,8 +207,10 @@ export const WORLDS: World[] = [
     accent: "#f97316",
     secondaryAccent: "#c2410c",
     angle: 36,
+    xNorm: 0.53,
     crestShape: "swirl",
     assetUrl: `${base}assets/worlds/naruto.png`,
+    garmentImgUrl: `${base}assets/garments/naruto_garment.png`,
     colors: [
       { name: "Konoha Gold / Onyx", hex: "#0c0a09" },
       { name: "Sage Orange", hex: "#c2410c" },
@@ -224,8 +238,10 @@ export const WORLDS: World[] = [
     accent: "#eab308",
     secondaryAccent: "#854d0e",
     angle: 56,
+    xNorm: 0.80,
     crestShape: "diamond",
     assetUrl: `${base}assets/worlds/one-punch-man.png`,
+    garmentImgUrl: `${base}assets/garments/one_punch_man_garment.png`,
     colors: [
       { name: "Hero Yellow / Black", hex: "#18181b" },
       { name: "Punch Gold", hex: "#a16207" },

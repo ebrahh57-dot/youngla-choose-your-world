@@ -46,6 +46,31 @@ if (world && root && title && tagline) {
     mainImg.alt = `${world.name} Collection`;
   }
 
+  // Populate Interactive Image Switcher (Installation vs Signature Garment)
+  const thumbRow = document.getElementById("thumb-row");
+  if (thumbRow && world) {
+    thumbRow.innerHTML = `
+      <button type="button" class="collection-thumb-btn is-active" data-src="${world.assetUrl}">
+        <img src="${world.assetUrl}" alt="Installation" class="collection-thumb-img" />
+        <span class="collection-thumb-title">INSTALLATION</span>
+      </button>
+      <button type="button" class="collection-thumb-btn" data-src="${world.garmentImgUrl}">
+        <img src="${world.garmentImgUrl}" alt="${world.garment}" class="collection-thumb-img" />
+        <span class="collection-thumb-title">SIGNATURE PIECE</span>
+      </button>
+    `;
+
+    thumbRow.querySelectorAll<HTMLElement>(".collection-thumb-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        thumbRow.querySelectorAll(".collection-thumb-btn").forEach((b) => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        if (mainImg && btn.dataset.src) {
+          mainImg.src = btn.dataset.src;
+        }
+      });
+    });
+  }
+
   // Render Color Swatches
   if (colorSwatchesContainer && world.colors.length > 0) {
     colorSwatchesContainer.innerHTML = world.colors
@@ -93,11 +118,12 @@ if (world && root && title && tagline) {
         (w) => `
       <a href="collection.html?world=${w.slug}" class="other-world-card" style="--card-accent: ${w.accent}">
         <div class="other-world-img-wrap">
-          <img src="${w.assetUrl}" alt="${w.name}" class="other-world-img" loading="lazy" />
+          <img src="${w.garmentImgUrl || w.assetUrl}" alt="${w.name}" class="other-world-img" loading="lazy" />
         </div>
         <div class="other-world-info">
           <span class="other-world-franchise">${w.franchise}</span>
           <h4 class="other-world-name">${w.name}</h4>
+          <span class="other-world-garment-sub">${w.garment}</span>
           <span class="other-world-link">EXPLORE →</span>
         </div>
       </a>`

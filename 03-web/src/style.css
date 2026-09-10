@@ -283,15 +283,7 @@ button {
 .corner-kicker--br { bottom: 1.8rem; right: clamp(1.25rem, 3vw, 3rem); text-align: right; }
 
 .hero-copy {
-  position: absolute;
-  top: calc(var(--nav-h) + 0.5rem);
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  z-index: 10;
-  pointer-events: none;
-  width: 100%;
-  transition: opacity 0.5s var(--ease-cinematic);
+  display: none;
 }
 
 .hero-wordmark {
@@ -403,6 +395,23 @@ button {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 0.75rem;
   margin-bottom: 0.9rem;
+}
+.world-hud-garment-thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(20, 20, 26, 0.7);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+.world-hud-product-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.15rem;
 }
 .world-hud-price {
   color: var(--hud-accent, #fff);
