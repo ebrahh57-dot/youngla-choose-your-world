@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>YOUNGLA — The Collection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <script type="module" crossorigin src="./assets/collection-N0zpb2pt.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/worlds-B732-IWf.js">
+  <link rel="stylesheet" crossorigin href="./assets/worlds-CUSIEhjJ.css">
+  <link rel="stylesheet" crossorigin href="./assets/collection-Bps17Xc3.css">
+</head>
+<body>
+  <div id="wipe" aria-hidden="true"></div>
+
+  <header class="site-nav is-visible" data-nav>
+    <a class="nav-logo" href="index.html">YOUNGLA</a>
+    <nav class="nav-center" aria-label="Primary">
+      <a href="index.html#men">MEN</a>
+      <a href="index.html#women">WOMEN</a>
+      <a href="index.html#collections">COLLECTIONS</a>
+      <a href="index.html" class="is-active">COLLABS</a>
+      <a href="index.html#community">COMMUNITY</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-return-btn" href="index.html">← ROTUNDA</a>
+      <button type="button" aria-label="Search">SEARCH</button>
+      <button type="button" aria-label="Account">ACCOUNT</button>
+      <button type="button" id="cart-btn" aria-label="Cart">CART (<span id="cart-count">0</span>)</button>
+    </div>
+  </header>
+
+  <main id="collection-content" class="collection-page" data-collection>
+    <div class="collection-bg-glow" aria-hidden="true"></div>
+
+    <div class="collection-layout">
+      <!-- Left Column: Visual Showcase -->
+      <div class="collection-visual-panel">
+        <div class="collection-main-frame">
+          <img id="main-asset-img" src="" alt="YoungLA Collection Preview" class="collection-asset-img" />
+          <div class="collection-frame-badge">
+            <span class="collection-badge-dot"></span>
+            <span id="badge-franchise" class="collection-badge-franchise">FRANCHISE</span>
+          </div>
+          <div class="collection-frame-corner collection-frame-corner--tl"></div>
+          <div class="collection-frame-corner collection-frame-corner--tr"></div>
+          <div class="collection-frame-corner collection-frame-corner--bl"></div>
+          <div class="collection-frame-corner collection-frame-corner--br"></div>
+        </div>
+
+        <div class="collection-thumb-row" id="thumb-row">
+          <!-- Populated in JS -->
+        </div>
+      </div>
+
+      <!-- Right Column: Editorial Details & Purchasing -->
+      <div class="collection-details-panel">
+        <a class="collection-back-link" href="index.html">← RETURN TO ROTUNDA</a>
+
+        <p class="collection-eyebrow" data-eyebrow>YOUNGLA ×</p>
+        <h1 class="collection-title" data-title>—</h1>
+        <p class="collection-tagline" data-tagline>—</p>
+
+        <div class="collection-product-card">
+          <div class="product-header">
+            <h2 class="product-title" data-garment>SIGNATURE PIECE</h2>
+            <span class="product-price" data-price>$120</span>
+          </div>
+          <p class="product-badge">LIMITED RELEASE // SPECIAL EDITION</p>
+
+          <p class="product-description" data-description>
+            Engineered with high-density materials, brutalist silhouette, and custom franchise hardware.
+          </p>
+
+          <!-- Color Selector -->
+          <div class="selector-block">
+            <label class="selector-label">COLORWAY: <span id="active-color-name">DEFAULT</span></label>
+            <div class="color-swatches" id="color-swatches">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Size Selector -->
+          <div class="selector-block">
+            <div class="size-header">
+              <label class="selector-label">SELECT SIZE</label>
+              <span class="size-guide-cue">OVERSIZED STREETWEAR FIT</span>
+            </div>
+            <div class="size-buttons" id="size-buttons">
+              <button type="button" class="size-btn" data-size="S">S</button>
+              <button type="button" class="size-btn" data-size="M">M</button>
+              <button type="button" class="size-btn is-active" data-size="L">L</button>
+              <button type="button" class="size-btn" data-size="XL">XL</button>
+              <button type="button" class="size-btn" data-size="XXL">XXL</button>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="product-actions">
+            <button type="button" class="btn-primary" id="add-to-cart-btn">ADD TO BAG</button>
+            <button type="button" class="btn-secondary" id="buy-now-btn">QUICK BUY</button>
+          </div>
+
+          <!-- Tech Specs List -->
+          <div class="tech-specs-block">
+            <h3 class="specs-title">CRAFTSMANSHIP & SPECIFICATIONS</h3>
+            <ul class="specs-list" id="specs-list">
+              <!-- Populated dynamically -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Other Worlds Navigation -->
+    <section class="other-worlds-section">
+      <h3 class="other-worlds-title">CHOOSE ANOTHER WORLD</h3>
+      <div class="other-worlds-grid" id="other-worlds-grid">
+        <!-- Populated dynamically -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Notification Toast -->
+  <div class="cart-toast" id="cart-toast" aria-live="assertive">
+    <div class="cart-toast-inner">
+      <span class="toast-check">✓</span>
+      <div class="toast-info">
+        <p class="toast-title" id="toast-title">ADDED TO BAG</p>
+        <p class="toast-sub" id="toast-sub">Size L</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
