@@ -1,14 +1,14 @@
 /* ===========================================================
    YOUNGLA — Choose Your World
-   Concept: the store is architecture; every collaboration is a
-   room you walk into. Monumental, disciplined, nocturnal.
+   Concept: Monumental digital flagship installation.
+   Quiet, restrained, architectural, nocturnal luxury.
    =========================================================== */
 
 :root {
-  --color-bg: #060608;
-  --color-concrete: #141418;
-  --color-concrete-light: #24242a;
-  --color-steel: #71747d;
+  --color-bg: #040406;
+  --color-concrete: #101014;
+  --color-concrete-light: #1c1c22;
+  --color-steel: #636670;
   --color-off-white: #ededf2;
   --color-white: #ffffff;
   --color-accent: #ededf2;
@@ -16,7 +16,7 @@
   --font-display: "Bebas Neue", "Archivo Narrow", sans-serif;
   --font-ui: "Archivo", "Helvetica Neue", Arial, sans-serif;
 
-  --nav-h: 88px;
+  --nav-h: 80px;
   --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -72,7 +72,7 @@ img {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-white);
+  outline: 1px solid rgba(255, 255, 255, 0.6);
   outline-offset: 3px;
 }
 
@@ -104,14 +104,14 @@ button {
 .loader-mark {
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 7vw, 4rem);
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   color: var(--color-white);
-  text-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
 }
 .loader-bar {
   width: min(240px, 45vw);
   height: 1px;
-  background: rgba(237, 237, 240, 0.15);
+  background: rgba(237, 237, 240, 0.12);
 }
 #loader-fill {
   display: block;
@@ -121,8 +121,8 @@ button {
   transition: width 0.2s linear;
 }
 .loader-sub {
-  font-size: 0.68rem;
-  letter-spacing: 0.4em;
+  font-size: 0.62rem;
+  letter-spacing: 0.42em;
   color: var(--color-steel);
   font-weight: 600;
 }
@@ -140,7 +140,7 @@ button {
 }
 
 /* ---------------------------------------------------------
-   Navigation
+   Site Navigation (Ultra-subtle, high-end editorial)
    --------------------------------------------------------- */
 .site-nav {
   position: fixed;
@@ -152,8 +152,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 clamp(1.25rem, 3vw, 3rem);
-  background: linear-gradient(to bottom, rgba(6, 6, 8, 0.85), rgba(6, 6, 8, 0));
+  padding: 0 clamp(1.5rem, 3.5vw, 3.5rem);
+  background: linear-gradient(to bottom, rgba(4, 4, 6, 0.75) 0%, rgba(4, 4, 6, 0) 100%);
   opacity: 0;
   transition: opacity 0.8s var(--ease-cinematic);
   pointer-events: none;
@@ -165,63 +165,68 @@ button {
 
 .nav-logo {
   font-family: var(--font-display);
-  font-size: 1.85rem;
-  letter-spacing: 0.18em;
+  font-size: 1.65rem;
+  letter-spacing: 0.22em;
   color: var(--color-white);
   text-decoration: none;
   font-weight: 900;
+  transition: opacity 0.3s ease;
+}
+.nav-logo:hover {
+  opacity: 0.85;
 }
 
 .nav-center {
   display: flex;
-  gap: clamp(1.2rem, 2.5vw, 2.5rem);
+  gap: clamp(1.2rem, 2.8vw, 2.8rem);
 }
 .nav-center a {
-  color: var(--color-steel);
+  color: rgba(255, 255, 255, 0.32);
   text-decoration: none;
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-  font-weight: 600;
-  transition: color 0.2s var(--ease-cinematic);
+  font-size: 0.64rem;
+  letter-spacing: 0.24em;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: color 0.3s var(--ease-cinematic);
 }
 .nav-center a:hover,
 .nav-center a.is-active {
-  color: var(--color-white);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-right {
   display: flex;
   align-items: center;
-  gap: clamp(0.75rem, 1.5vw, 1.5rem);
+  gap: clamp(0.9rem, 2vw, 2rem);
 }
 .nav-right button {
   background: none;
   border: none;
-  color: var(--color-steel);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  font-weight: 600;
-  padding: 0.4rem 0.2rem;
-  transition: color 0.2s var(--ease-cinematic);
+  color: rgba(255, 255, 255, 0.32);
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  font-weight: 500;
+  padding: 0.3rem 0;
+  transition: color 0.3s var(--ease-cinematic);
+  text-transform: uppercase;
 }
 .nav-right button:hover {
-  color: var(--color-white);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-sound-btn {
   background: transparent !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  color: var(--color-steel) !important;
-  font-size: 0.65rem !important;
-  letter-spacing: 0.14em !important;
-  padding: 0.35rem 0.8rem !important;
-  border-radius: 2px;
-  transition: all 0.25s var(--ease-cinematic) !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.32) !important;
+  font-size: 0.62rem !important;
+  letter-spacing: 0.22em !important;
+  padding: 0.3rem 0 !important;
+  border-radius: 0 !important;
+  transition: color 0.3s var(--ease-cinematic) !important;
 }
 .nav-sound-btn:hover,
 .nav-sound-btn.is-active {
-  color: var(--color-white) !important;
-  border-color: var(--color-white) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 @media (max-width: 860px) {
@@ -233,17 +238,17 @@ button {
     padding: 0 1.25rem;
   }
   .nav-right {
-    gap: 0.7rem;
+    gap: 0.8rem;
   }
   .nav-right button {
-    font-size: 0.62rem;
-    letter-spacing: 0.08em;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
     white-space: nowrap;
   }
 }
 
 /* ---------------------------------------------------------
-   Desktop experience (WebGL rotunda)
+   Desktop Experience (WebGL rotunda)
    --------------------------------------------------------- */
 .experience {
   position: relative;
@@ -265,117 +270,196 @@ button {
   touch-action: none;
 }
 
-/* Campaign Lookbook Marks */
+/* Subtle Editorial Lookbook Marks */
 .campaign-mark {
   position: absolute;
   margin: 0;
   font-family: var(--font-ui);
-  font-size: 0.62rem;
-  letter-spacing: 0.22em;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.56rem;
+  letter-spacing: 0.32em;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.22);
   z-index: 15;
   opacity: 0;
   pointer-events: none;
   text-transform: uppercase;
 }
-.campaign-mark--tl { top: calc(var(--nav-h) + 1.2rem); left: clamp(1.25rem, 3.5vw, 3.5rem); }
-.campaign-mark--tr { top: calc(var(--nav-h) + 1.2rem); right: clamp(1.25rem, 3.5vw, 3.5rem); text-align: right; }
-.campaign-mark--bl { bottom: 1.8rem; left: clamp(1.25rem, 3.5vw, 3.5rem); }
-.campaign-mark--br { bottom: 1.8rem; right: clamp(1.25rem, 3.5vw, 3.5rem); text-align: right; }
+.campaign-mark--tl { top: calc(var(--nav-h) + 0.8rem); left: clamp(1.5rem, 3.5vw, 3.5rem); }
+.campaign-mark--tr { top: calc(var(--nav-h) + 0.8rem); right: clamp(1.5rem, 3.5vw, 3.5rem); text-align: right; }
 
 .hero-copy {
   display: none;
 }
 
 /* ---------------------------------------------------------
-   Floating Editorial Typography (No boxes, pure campaign typography)
+   Floating Editorial Typography (Flank-Aware Layout)
+   Leaves the Central Hero Model Unobstructed & Iconic
    --------------------------------------------------------- */
 .editorial-overlay {
   position: absolute;
-  left: 50%;
-  bottom: 5.2rem;
-  transform: translate(-50%, 10px);
-  width: min(92vw, 680px);
-  text-align: center;
+  bottom: 4.8rem;
   z-index: 50;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  width: min(88vw, 540px);
+  transition: opacity 0.5s var(--ease-cinematic), transform 0.5s var(--ease-cinematic);
 }
 .editorial-overlay.is-visible {
   opacity: 1;
   pointer-events: auto;
-  transform: translate(-50%, 0);
+}
+
+/* Left Flank (Batman, The Boys, Demon Slayer) */
+.editorial-overlay[data-flank="left"] {
+  left: clamp(2.2rem, 5vw, 6.5rem);
+  right: auto;
+  transform: translateY(12px);
+  text-align: left;
+}
+.editorial-overlay[data-flank="left"].is-visible {
+  transform: translateY(0);
+}
+.editorial-overlay[data-flank="left"] .editorial-inner {
+  align-items: flex-start;
+}
+
+/* Right Flank (Attack on Titan, Naruto, One Punch Man) */
+.editorial-overlay[data-flank="right"] {
+  right: clamp(1.8rem, 4.5vw, 5.5rem);
+  left: auto;
+  transform: translateY(12px);
+  text-align: right;
+  max-width: min(40vw, 440px);
+}
+.editorial-overlay[data-flank="right"].is-visible {
+  transform: translateY(0);
+}
+.editorial-overlay[data-flank="right"] .editorial-inner {
+  align-items: flex-end;
+}
+
+/* Left Flank (Batman, The Boys, Demon Slayer, YoungLA) */
+.editorial-overlay[data-flank="left"] {
+  left: clamp(1.8rem, 4.5vw, 5.5rem);
+  right: auto;
+  transform: translateY(12px);
+  text-align: left;
+  max-width: min(40vw, 440px);
+}
+.editorial-overlay[data-flank="left"].is-visible {
+  transform: translateY(0);
+}
+.editorial-overlay[data-flank="left"] .editorial-inner {
+  align-items: flex-start;
 }
 
 .editorial-inner {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
+  gap: 0.25rem;
 }
 
 .editorial-franchise {
   font-family: var(--font-ui);
-  font-size: 0.66rem;
-  letter-spacing: 0.32em;
+  font-size: 0.62rem;
+  letter-spacing: 0.36em;
   font-weight: 700;
   color: var(--hud-accent, var(--color-off-white));
   text-transform: uppercase;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
+  margin-bottom: 0.15rem;
 }
 
 .editorial-title {
-  margin: 0.1rem 0 0.2rem;
+  margin: 0 0 0.35rem;
   font-family: var(--font-display);
-  font-size: clamp(2.8rem, 5.5vw, 4.4rem);
+  font-size: clamp(2.3rem, 4.2vw, 3.6rem);
   letter-spacing: 0.12em;
-  line-height: 0.95;
+  line-height: 0.92;
   color: var(--color-white);
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.95), 0 0 40px rgba(255, 255, 255, 0.12);
+  text-shadow: 0 4px 35px rgba(0, 0, 0, 0.95), 0 0 40px rgba(255, 255, 255, 0.1);
 }
 
 .editorial-tagline {
-  margin: 0;
-  max-width: 520px;
+  margin: 0 0 0.8rem;
+  max-width: 440px;
   font-family: var(--font-ui);
-  font-size: 0.82rem;
-  line-height: 1.55;
+  font-size: 0.78rem;
+  line-height: 1.5;
   letter-spacing: 0.04em;
-  color: rgba(235, 235, 240, 0.82);
+  color: rgba(235, 235, 240, 0.78);
+  font-style: italic;
   font-weight: 400;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
 }
 
+/* Editorial "ENTER WORLD →" Invitation */
 .editorial-cta {
-  margin-top: 0.85rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.75rem;
   background: transparent;
   color: var(--color-white);
   border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-  padding: 0.3rem 0.2rem;
+  padding: 0.35rem 0;
   font-family: var(--font-ui);
   font-weight: 700;
-  font-size: 0.72rem;
-  letter-spacing: 0.24em;
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.25s ease;
+  position: relative;
+  transition: color 0.3s ease;
+}
+.editorial-cta::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-cinematic), opacity 0.4s ease;
 }
 .editorial-cta:hover {
-  border-bottom-color: var(--hud-accent, #fff);
   color: var(--hud-accent, #fff);
-  transform: translateY(-1px);
+}
+.editorial-cta:hover::after {
+  opacity: 1;
+  transform: scaleX(1.08);
 }
 .editorial-cta-arrow {
-  font-size: 0.88rem;
-  transition: transform 0.25s ease;
+  font-size: 0.85rem;
+  display: inline-block;
+  transition: transform 0.35s var(--ease-cinematic);
 }
 .editorial-cta:hover .editorial-cta-arrow {
-  transform: translateX(4px);
+  transform: translateX(5px);
+}
+
+@media (max-width: 860px) {
+  .editorial-overlay,
+  .editorial-overlay[data-flank="left"],
+  .editorial-overlay[data-flank="right"],
+  .editorial-overlay[data-flank="center"] {
+    left: 50% !important;
+    right: auto !important;
+    bottom: 5.2rem !important;
+    transform: translate(-50%, 10px) !important;
+    text-align: center !important;
+    width: min(92vw, 420px) !important;
+  }
+  .editorial-overlay.is-visible,
+  .editorial-overlay[data-flank="left"].is-visible,
+  .editorial-overlay[data-flank="right"].is-visible,
+  .editorial-overlay[data-flank="center"].is-visible {
+    transform: translate(-50%, 0) !important;
+  }
+  .editorial-overlay .editorial-inner {
+    align-items: center !important;
+  }
 }
 
 /* ---------------------------------------------------------
@@ -384,7 +468,7 @@ button {
 .flagship-prompt {
   position: absolute;
   left: 50%;
-  bottom: 5.2rem;
+  bottom: 4.8rem;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
@@ -405,18 +489,18 @@ button {
 }
 .flagship-prompt-tag {
   font-family: var(--font-ui);
-  font-size: 0.56rem;
-  letter-spacing: 0.35em;
+  font-size: 0.54rem;
+  letter-spacing: 0.38em;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.3);
   text-transform: uppercase;
 }
 .flagship-prompt-title {
   font-family: var(--font-ui);
-  font-size: 0.76rem;
-  letter-spacing: 0.38em;
+  font-size: 0.74rem;
+  letter-spacing: 0.4em;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
 }
 
@@ -425,7 +509,7 @@ button {
    --------------------------------------------------------- */
 .editorial-ticker {
   position: absolute;
-  bottom: 1.6rem;
+  bottom: 1.4rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -435,16 +519,16 @@ button {
   opacity: 0;
   max-width: 95vw;
   overflow-x: auto;
-  padding: 0.4rem 1rem;
+  padding: 0.35rem 1rem;
 }
 .editorial-ticker-item {
   background: transparent;
   border: none;
   font-family: var(--font-ui);
-  font-size: 0.64rem;
-  letter-spacing: 0.24em;
+  font-size: 0.62rem;
+  letter-spacing: 0.26em;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.32);
   cursor: pointer;
   white-space: nowrap;
   padding: 0.25rem 0.2rem;
@@ -461,193 +545,136 @@ button {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 1px;
-  background: var(--item-accent, #fff);
-  box-shadow: 0 0 8px var(--item-accent, #fff);
+  height: 1.5px;
+  background: var(--item-accent, #ffffff);
+  box-shadow: 0 0 10px var(--item-accent, #ffffff);
 }
 .editorial-ticker-sep {
-  color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.12);
   font-size: 0.6rem;
+  user-select: none;
 }
 
 /* ---------------------------------------------------------
-   Mobile fallback (vertical scroll)
+   Mobile Fallback Experience (Vertical World List)
    --------------------------------------------------------- */
 .mobile-worlds {
   display: none;
 }
 
-.mobile-hero {
-  padding: calc(var(--nav-h) + 2rem) 1.5rem 2.5rem;
-  text-align: center;
-}
-.mobile-hero .hero-wordmark,
-.mobile-hero .hero-tagline,
-.mobile-hero .hero-sub {
-  position: static;
-  opacity: 1;
-  transform: none;
-}
-.mobile-hero .hero-wordmark { font-size: clamp(2.5rem, 14vw, 3.5rem); }
-.mobile-hero .hero-tagline { letter-spacing: 0.4em; }
-
-.mobile-hero-figure {
-  width: 76px;
-  height: 148px;
-  margin: 0 auto 1.5rem;
-  position: relative;
-  background: #08080a;
-  border: 1px solid rgba(237, 237, 240, 0.25);
-  border-radius: 46% 46% 10% 10%;
-}
-.mobile-hero-figure::before {
-  content: "";
-  position: absolute;
-  top: -17px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 36px;
-  background: #08080a;
-  border: 1px solid rgba(237, 237, 240, 0.25);
-  border-radius: 50% 50% 40% 40%;
-}
-.mobile-hero-figure::after {
-  content: "YLA";
-  position: absolute;
-  top: 46%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  font-weight: 700;
-  color: var(--color-steel);
-}
-
-.world-list {
-  list-style: none;
-  margin: 0;
-  padding: 0 0 4rem;
-}
-
-.world-card {
-  position: relative;
-  min-height: 85vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.4rem;
-  text-align: center;
-  padding: 2.5rem 1.5rem;
-  border-top: 1px solid rgba(237, 237, 240, 0.08);
-  overflow: hidden;
-}
-
-.world-card-glow {
-  position: absolute;
-  inset: -20% -20% auto -20%;
-  height: 70%;
-  background: radial-gradient(closest-side, var(--card-accent, #fff) 0%, transparent 72%);
-  opacity: 0.18;
-  filter: blur(12px);
-  pointer-events: none;
-}
-
-.world-card-image-wrap {
-  position: relative;
-  width: min(84vw, 320px);
-  height: 360px;
-  border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85);
-}
-.world-card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.world-card-badge {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(10, 10, 14, 0.88);
-  backdrop-filter: blur(8px);
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-.world-card-crest {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--card-accent, #fff);
-  box-shadow: 0 0 6px var(--card-accent, #fff);
-}
-.world-card-franchise {
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
-  font-weight: 700;
-  color: var(--color-white);
-}
-
-.world-card-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
-}
-.world-card-name {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 8vw, 2.75rem);
-  letter-spacing: 0.08em;
-  color: var(--color-white);
-}
-.world-card-tagline {
-  margin: 0;
-  max-width: 32ch;
-  font-size: 0.85rem;
-  color: var(--color-steel);
-}
-.world-card-product-pill {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.8rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  font-weight: 600;
-  margin: 0.4rem 0 0.8rem;
-}
-.world-card-garment {
-  color: var(--card-accent, #fff);
-}
-.world-card-price {
-  color: var(--color-white);
-  font-weight: 700;
-}
-.world-card-cta {
-  background: var(--color-white);
-  color: #000;
-  padding: 0.8rem 2rem;
-  font-size: 0.74rem;
-  letter-spacing: 0.16em;
-  font-weight: 700;
-  text-decoration: none;
-  display: inline-block;
-  transition: transform 0.2s ease;
-}
-.world-card-cta:active {
-  transform: scale(0.98);
-}
-
 @media (max-width: 860px) {
-  .experience { display: none; }
-  .mobile-worlds { display: block; }
+  .experience {
+    display: none;
+  }
+
+  .mobile-worlds {
+    display: block;
+    min-height: 100vh;
+    background: var(--color-bg);
+    padding-bottom: 4rem;
+  }
+
+  .mobile-hero {
+    position: relative;
+    padding: calc(var(--nav-h) + 2rem) 1.5rem 2.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .hero-wordmark {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    letter-spacing: 0.18em;
+    margin: 0;
+    line-height: 0.95;
+    color: var(--color-white);
+  }
+
+  .hero-tagline {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.12em;
+    color: var(--color-off-white);
+    margin: 1rem 0 0.5rem;
+    line-height: 1.05;
+  }
+
+  .hero-sub {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    color: var(--color-steel);
+    margin: 0;
+  }
+
+  .world-list {
+    list-style: none;
+    margin: 0;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .world-card {
+    position: relative;
+    background: var(--color-concrete);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .world-card-banner {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #0b0b0e;
+  }
+
+  .world-card-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .world-card-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .world-card-franchise {
+    font-size: 0.6rem;
+    letter-spacing: 0.28em;
+    font-weight: 700;
+    color: var(--card-accent, #fff);
+  }
+
+  .world-card-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: 0.1em;
+    margin: 0;
+    color: var(--color-white);
+    line-height: 1;
+  }
+
+  .world-card-tagline {
+    font-size: 0.76rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.4;
+    margin: 0.2rem 0 0.8rem;
+  }
+
+  .world-card-link {
+    align-self: flex-start;
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    font-weight: 700;
+    color: var(--color-white);
+    text-decoration: none;
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  }
 }

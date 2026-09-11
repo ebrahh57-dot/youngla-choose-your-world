@@ -65,6 +65,9 @@ function initDesktop() {
         if (!editorialOverlay) return;
 
         if (world) {
+          const flank = world.xNorm <= 0 ? "left" : "right";
+          editorialOverlay.dataset.flank = flank;
+
           if (hudFranchise) hudFranchise.textContent = world.franchise;
           if (hudTitle) hudTitle.textContent = world.name;
           if (hudTagline) hudTagline.textContent = world.tagline;
@@ -140,7 +143,7 @@ function initDesktop() {
     window.addEventListener("beforeunload", dispose, { once: true });
 
     // Staggered intro for subtle editorial UI marks
-    gsap.to(campaignMarks, { opacity: 0.55, duration: 1.2, delay: 3.2, stagger: 0.1, ease: "power2.out" });
+    gsap.to(campaignMarks, { opacity: 0.35, duration: 1.2, delay: 3.2, stagger: 0.1, ease: "power2.out" });
     if (worldBar) {
       gsap.to(worldBar, { opacity: 1, duration: 1.2, delay: 3.6, ease: "power2.out" });
     }
