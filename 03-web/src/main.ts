@@ -87,16 +87,26 @@ function initDesktop() {
           wipe.style.background = "#040406";
           gsap.to(wipe, {
             opacity: 1,
-            duration: 0.55,
-            ease: "power2.inOut",
+            duration: 0.40,
+            ease: "power2.in",
+            onComplete: () => {
+              window.location.href = `collection.html?world=${world.slug}`;
+            }
           });
-        }
-        window.setTimeout(() => {
+        } else {
           window.location.href = `collection.html?world=${world.slug}`;
-        }, 600);
+        }
       },
-
-      canClearHover
+      canClearHover,
+      (_world: World) => {
+        // Immediate UI dismiss on click: lets viewer experience physical architectural portal fly-through
+        gsap.to([editorialOverlay, flagshipPrompt, worldBar], {
+          opacity: 0,
+          duration: 0.25,
+          ease: "power2.out",
+          overwrite: "auto"
+        });
+      }
     );
 
     // Keep overlay active if mouse moves directly onto it

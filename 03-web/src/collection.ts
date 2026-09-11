@@ -28,17 +28,11 @@ const toastSub = document.getElementById("toast-sub");
 let selectedSize = "L";
 let selectedColor = world.colors[0]?.name || "Default";
 
-// Emerge gracefully from darkness
+// Ensure wipe starts at solid threshold darkness
 const wipe = document.getElementById("wipe");
 if (wipe) {
   wipe.style.background = "#040406";
   wipe.style.opacity = "1";
-  gsap.to(wipe, {
-    opacity: 0,
-    duration: 0.75,
-    ease: "power2.out",
-    delay: 0.08,
-  });
 }
 
 // Initialize World Content
@@ -206,27 +200,91 @@ addToCartBtn?.addEventListener("click", () => {
 
 updateCartBadge();
 
-// Smooth Entrance Animation
+// Disciplined, Restrained Cinematic Collection Reveal
+// Sequence: 1. Primary Image -> 2. Title -> 3. Product Info -> 4. Controls
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 if (!reduce) {
-  gsap.from(".collection-visual-panel", {
+  // Set initial spatial states
+  gsap.set(".collection-main-frame", { opacity: 0, scale: 0.985 });
+  gsap.set([".collection-back-link", ".collection-eyebrow", ".collection-title", ".collection-tagline"], {
     opacity: 0,
-    x: -30,
-    duration: 1.0,
-    ease: "power3.out",
+    y: 12,
   });
-  gsap.from(".collection-details-panel > *", {
+  gsap.set([".product-header", ".product-badge", "[data-description]", ".tech-specs-block"], {
     opacity: 0,
-    y: 24,
-    duration: 0.9,
-    stagger: 0.08,
-    ease: "power3.out",
+    y: 10,
   });
-  gsap.from(".other-worlds-section", {
+  gsap.set([".selector-block", ".product-actions", ".collection-thumb-row", ".other-worlds-section"], {
     opacity: 0,
-    y: 30,
-    duration: 1.0,
-    delay: 0.4,
-    ease: "power3.out",
+    y: 8,
   });
+
+  const revealTl = gsap.timeline({ delay: 0.06 });
+
+  // Phase 0: Wipe lifts from nocturnal threshold darkness
+  if (wipe) {
+    revealTl.to(
+      wipe,
+      {
+        opacity: 0,
+        duration: 0.70,
+        ease: "power2.out",
+      },
+      0
+    );
+  }
+
+  // 1. Primary Image: emerges out of threshold darkness with photographic presence
+  revealTl.to(
+    ".collection-main-frame",
+    {
+      opacity: 1,
+      scale: 1,
+      duration: 0.90,
+      ease: "power2.out",
+    },
+    0.16
+  );
+
+  // 2. Collection Title & Brand Framing
+  revealTl.to(
+    [".collection-back-link", ".collection-eyebrow", ".collection-title", ".collection-tagline"],
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.80,
+      stagger: 0.07,
+      ease: "power2.out",
+    },
+    0.36
+  );
+
+  // 3. Product Information: craftsmanship and specifications
+  revealTl.to(
+    [".product-header", ".product-badge", "[data-description]", ".tech-specs-block"],
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.75,
+      stagger: 0.07,
+      ease: "power2.out",
+    },
+    0.56
+  );
+
+  // 4. Controls: purchase actions, sizing, colorway, and navigation
+  revealTl.to(
+    [".selector-block", ".product-actions", ".collection-thumb-row", ".other-worlds-section"],
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.70,
+      stagger: 0.07,
+      ease: "power2.out",
+    },
+    0.76
+  );
+} else if (wipe) {
+  gsap.to(wipe, { opacity: 0, duration: 0.4 });
 }

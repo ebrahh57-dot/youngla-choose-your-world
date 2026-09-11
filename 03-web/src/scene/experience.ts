@@ -47,7 +47,8 @@ export function initExperience(
   container: HTMLElement,
   onWorldFocus: (world: World | null) => void,
   onWorldEnter: (world: World) => void,
-  canClearHover?: () => boolean
+  canClearHover?: () => boolean,
+  onWorldStartEnter?: (world: World) => void
 ): ExperienceHandles {
   const textureLoader = new THREE.TextureLoader();
   const disposableTextures: THREE.Texture[] = [];
@@ -56,7 +57,8 @@ export function initExperience(
   // --- Three.js Scene & Camera Setup ---
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x040406); // Deepest nocturnal black
-  scene.fog = new THREE.FogExp2(0x040406, 0.014);
+  // Subtle linear fog starting well behind the camera (zero haze veil across the rotunda)
+  scene.fog = new THREE.Fog(0x040406, 14, 55);
 
   const camera = new THREE.PerspectiveCamera(43, container.clientWidth / container.clientHeight, 0.1, 80);
   const BASE_CAM_Z = 7.6;
@@ -74,7 +76,7 @@ export function initExperience(
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 1.14; // Crisp, high-end editorial exposure
   container.appendChild(renderer.domElement);
 
   // --- Post-Processing: Restrained Filmic Bloom ---
@@ -82,15 +84,16 @@ export function initExperience(
   composer.addPass(new RenderPass(scene, camera));
   const bloomPass = new UnrealBloomPass(
     new THREE.Vector2(container.clientWidth, container.clientHeight),
-    0.18, // Subtle diffusion for architectural letters, never video-game glow
+    0.16, // Subtle diffusion for architectural letters, never video-game glow
     0.35, // Radius
-    0.90  // High threshold preserves photographic sharpness
+    0.92  // High threshold preserves photographic sharpness
   );
   composer.addPass(bloomPass);
 
   // --- 1. Monumental Architectural Rotunda Backdrop (Single Master Asset with Integrated Single Character) ---
   const conceptTex = textureLoader.load(`${base}assets/master/youngla_rotunda_master_hd.png`);
   conceptTex.colorSpace = THREE.SRGBColorSpace;
+  conceptTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
   conceptTex.minFilter = THREE.LinearMipmapLinearFilter;
   conceptTex.magFilter = THREE.LinearFilter;
   conceptTex.generateMipmaps = true;
@@ -114,40 +117,63 @@ export function initExperience(
   }
   backdropGeo.computeVertexNormals();
 
-  // Standard PBR material for physical light and shadow response
+  // Calibrated PBR material: lower roughness lets architectural specular highlights and reflections register crisply
   const backdropMat = new THREE.MeshStandardMaterial({
     map: conceptTex,
     side: THREE.FrontSide,
     transparent: true,
     opacity: 0,
-    roughness: 0.78,
-    metalness: 0.12,
+    roughness: 0.36,
+    metalness: 0.04,
   });
   const backdropMesh = new THREE.Mesh(backdropGeo, backdropMat);
   backdropMesh.position.set(0, 0, 0);
   scene.add(backdropMesh);
 
-  // --- 2. Dynamic Physical Architectural Lighting Rig ---
-  // Ambient gallery light providing balanced visibility across all architecture (no black crush)
-  const ambientLight = new THREE.AmbientLight(0xdbeafe, 0.92);
+  // --- 2. Dynamic Physical Architectural Lighting Hierarchy ---
+  // Gallery ambient fill providing clean architectural legibility without crushing
+  const ambientLight = new THREE.AmbientLight(0xdde7f2, 0.76);
   scene.add(ambientLight);
 
   // Overhead directional architectural ceiling light
-  const ceilingLight = new THREE.DirectionalLight(0xfff4e6, 0.42);
-  ceilingLight.position.set(0, 5.2, 4.0);
+  const ceilingLight = new THREE.DirectionalLight(0xfff4e6, 0.45);
+  ceilingLight.position.set(0, 5.5, 3.8);
   scene.add(ceilingLight);
 
   // YOUNGLA Architectural Signage Light: practical light source right at the crown letters
-  const signLight = new THREE.PointLight(0xffedd5, 1.8, 8.5, 1.4);
-  signLight.position.set(0, 2.2, 0.5);
+  const signLight = new THREE.PointLight(0xffedd5, 2.5, 9.5, 1.2);
+  signLight.position.set(0, 2.25, 0.7);
   scene.add(signLight);
 
+  // Signage downward architectural wash
+  const signDownwash = new THREE.SpotLight(0xffedd5, 1.6, 7.5, Math.PI / 3.2, 0.75, 1.2);
+  signDownwash.position.set(0, 2.3, 0.6);
+  const signTarget = new THREE.Object3D();
+  signTarget.position.set(0, 0, 0);
+  scene.add(signTarget);
+  signDownwash.target = signTarget;
+  scene.add(signDownwash);
+
+  // Central Model Key Light: controlled spotlight focused on model torso and YoungLA hoodie
+  const modelKeyLight = new THREE.SpotLight(0xfff8ee, 1.35, 8.5, Math.PI / 5.5, 0.6, 1.4);
+  modelKeyLight.position.set(0, 0.8, 3.2);
+  const modelTarget = new THREE.Object3D();
+  modelTarget.position.set(0, 0.1, 0);
+  scene.add(modelTarget);
+  modelKeyLight.target = modelTarget;
+  scene.add(modelKeyLight);
+
+  // Central Model Rim Light: back light separating model shoulders and hair from the background arch
+  const modelRimLight = new THREE.PointLight(0xdbeafe, 1.4, 4.2, 1.6);
+  modelRimLight.position.set(0, 1.2, -0.3);
+  scene.add(modelRimLight);
+
   // Subtle ground bounce from dark reflective concrete
-  const floorBounce = new THREE.DirectionalLight(0x38bdf8, 0.10);
-  floorBounce.position.set(0, -3.0, 3.0);
+  const floorBounce = new THREE.DirectionalLight(0x38bdf8, 0.14);
+  floorBounce.position.set(0, -3.0, 2.5);
   scene.add(floorBounce);
 
-  // --- 3. Collaboration World Physical Installations (Physical Spotlights, Zero Fake Glow Forcefields) ---
+  // --- 3. Collaboration World Physical Installations ---
   interface AlcoveRig {
     world: World;
     worldX: number;
@@ -225,7 +251,7 @@ export function initExperience(
   const particles = new THREE.Points(particleGeo, particleMat);
   scene.add(particles);
 
-  // --- 5. Interaction: Spatial Camera Hover & Physical Approach ---
+  // --- 5. Interaction: Spatial Camera Hover & Physical Orbital Approach ---
   const pointer = { x: 0, y: 0 };
   const pointerNDC = new THREE.Vector2();
   const raycaster = new THREE.Raycaster();
@@ -244,13 +270,13 @@ export function initExperience(
       onWorldFocus(hoveredRig.world);
       container.style.cursor = "pointer";
 
-      // ORBIT -> FOCUS -> APPROACH
-      // Camera physically dollies toward the selected portal:
-      // Approaches from Z=7.6 to Z=5.2 (stopping cleanly before entering)
+      // ORBITAL SPATIAL CAMERA APPROACH:
+      // Combines lateral displacement, perspective rotation, eye-level dip, and forward dolly.
+      // Approaches from Z=7.6 to Z=4.6 (stopping cleanly right in front of portal threshold)
       if (!reduceMotion) {
-        const targetX = hoveredRig.worldX * 0.42;
-        const targetY = BASE_CAM_Y + 0.05;
-        const targetZ = BASE_CAM_Z - 2.4; // 5.2
+        const targetX = hoveredRig.worldX * 0.58;
+        const targetY = BASE_CAM_Y - 0.05; // Human eye-level perspective dip
+        const targetZ = 4.6;
 
         gsap.killTweensOf(camera.position);
         gsap.killTweensOf(camLookTarget);
@@ -259,27 +285,33 @@ export function initExperience(
           x: targetX,
           y: targetY,
           z: targetZ,
-          duration: 1.4,
+          duration: 1.6,
           ease: "power2.out",
         });
 
+        // Dynamic perspective rotation toward portal
         gsap.to(camLookTarget, {
-          x: hoveredRig.worldX * 0.68,
-          y: hoveredRig.worldY + 0.08,
+          x: hoveredRig.worldX * 0.86,
+          y: hoveredRig.worldY + 0.12,
           z: hoveredRig.worldZ,
-          duration: 1.4,
+          duration: 1.6,
           ease: "power2.out",
         });
       }
 
       // Hierarchy: selected world gains architectural focus
       gsap.to(ambientLight, {
-        intensity: 0.60,
+        intensity: 0.55,
         duration: 0.8,
         ease: "power2.out",
       });
       gsap.to(ceilingLight, {
-        intensity: 0.28,
+        intensity: 0.25,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+      gsap.to(modelKeyLight, {
+        intensity: 0.70,
         duration: 0.8,
         ease: "power2.out",
       });
@@ -287,8 +319,8 @@ export function initExperience(
       alcoveRigs.forEach((rig) => {
         const isTarget = rig === hoveredRig;
         gsap.to(rig.spotLight, {
-          intensity: isTarget ? 4.2 : 0.28, // Other worlds stay visible, not black holes
-          duration: 0.7,
+          intensity: isTarget ? 5.2 : 0.35, // Other worlds stay visible, quiet in peripheral vision
+          duration: 0.8,
           ease: "power2.out",
         });
       });
@@ -304,7 +336,7 @@ export function initExperience(
           x: pointer.x * 0.18,
           y: BASE_CAM_Y + pointer.y * 0.06,
           z: BASE_CAM_Z,
-          duration: 1.4,
+          duration: 1.6,
           ease: "power2.out",
         });
 
@@ -312,19 +344,24 @@ export function initExperience(
           x: 0,
           y: 0.05,
           z: 0,
-          duration: 1.4,
+          duration: 1.6,
           ease: "power2.out",
         });
       }
 
       // Ambient and directional return to full flagship visibility
       gsap.to(ambientLight, {
-        intensity: 0.92,
+        intensity: 0.76,
         duration: 0.8,
         ease: "power2.out",
       });
       gsap.to(ceilingLight, {
-        intensity: 0.42,
+        intensity: 0.45,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+      gsap.to(modelKeyLight, {
+        intensity: 1.35,
         duration: 0.8,
         ease: "power2.out",
       });
@@ -378,17 +415,21 @@ export function initExperience(
   }
   container.addEventListener("pointermove", onPointerMove);
 
-  // --- 6. Transition: Cinematic Portal Entry into Natural Darkness (No White Flash) ---
+  // --- 6. Transition: Cinematic Portal Entry into Natural Threshold Darkness ---
   function enterWorld(rig: AlcoveRig) {
     if (isTransitioning) return;
     isTransitioning = true;
     soundFX.playEnter();
     container.style.cursor = "default";
 
-    // 01 & 02: Camera accelerates from hover position (Z=5.2) directly toward portal
-    const targetX = rig.worldX * 0.85;
-    const targetY = rig.worldY + 0.06;
-    const targetZ = 2.0;
+    // Inform UI to immediately dismiss text HUD so viewer experiences pure architecture
+    onWorldStartEnter?.(rig.world);
+
+    // Camera physically charges forward through the portal threshold:
+    // Moves right into the portal opening (Z = 0.25), scaling portal to dominate entire frame
+    const targetX = rig.worldX * 0.96;
+    const targetY = rig.worldY + 0.08;
+    const targetZ = 0.25;
 
     gsap.killTweensOf(camera.position);
     gsap.killTweensOf(camLookTarget);
@@ -397,45 +438,49 @@ export function initExperience(
       x: targetX,
       y: targetY,
       z: targetZ,
-      duration: 0.95,
-      ease: "power3.inOut",
+      duration: 1.15,
+      ease: "power3.in",
     });
 
     gsap.to(camLookTarget, {
       x: rig.worldX,
       y: rig.worldY + 0.05,
-      z: rig.worldZ,
-      duration: 0.95,
-      ease: "power3.inOut",
+      z: rig.worldZ - 3.0,
+      duration: 1.15,
+      ease: "power3.in",
     });
 
-    // 03: Selected world spotlight intensifies; surrounding environment drops into shadows
+    // Portal spotlight intensifies as camera approaches, highlighting threshold relief
     gsap.to(rig.spotLight, {
-      intensity: 6.0,
-      duration: 0.6,
-      ease: "power2.in",
+      intensity: 6.8,
+      duration: 0.75,
+      ease: "power2.out",
     });
+
+    // Ambient gallery light softens to 0.22 so the portal remains legible as it fills the frame
     gsap.to(ambientLight, {
-      intensity: 0.02,
-      duration: 0.7,
-      ease: "power2.in",
+      intensity: 0.22,
+      duration: 0.75,
+      ease: "power2.out",
     });
-    gsap.to(ceilingLight, {
+
+    // Rotunda directional and signage lights fade behind camera
+    gsap.to([ceilingLight, signLight, signDownwash, modelKeyLight, modelRimLight], {
       intensity: 0.0,
-      duration: 0.6,
+      duration: 0.75,
       ease: "power2.in",
     });
 
-    // Subdued, luxury photographic bloom (NO flash explosion)
+    // Subdued, photographic bloom
     gsap.to(bloomPass, {
-      strength: 0.20,
+      strength: 0.16,
       duration: 0.6,
     });
 
-    // 04 & 05: Trigger callback to fade to black and navigate
+    // At T = 750ms, camera reaches the threshold doorway: trigger handoff to wipe & navigation
     window.setTimeout(() => {
       onWorldEnter(rig.world);
-    }, 450);
+    }, 750);
   }
 
   function onClick() {
