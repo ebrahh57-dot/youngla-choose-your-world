@@ -28,9 +28,23 @@ const toastSub = document.getElementById("toast-sub");
 let selectedSize = "L";
 let selectedColor = world.colors[0]?.name || "Default";
 
+// Emerge gracefully from darkness
+const wipe = document.getElementById("wipe");
+if (wipe) {
+  wipe.style.background = "#040406";
+  wipe.style.opacity = "1";
+  gsap.to(wipe, {
+    opacity: 0,
+    duration: 0.75,
+    ease: "power2.out",
+    delay: 0.08,
+  });
+}
+
 // Initialize World Content
 if (world && root && title && tagline) {
   document.title = `YOUNGLA × ${world.name} — The Collection`;
+
   root.style.setProperty("--world-accent", world.accent);
 
   if (eyebrow) eyebrow.textContent = world.franchise;

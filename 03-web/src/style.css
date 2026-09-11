@@ -134,10 +134,11 @@ button {
   position: fixed;
   inset: 0;
   z-index: 1500;
-  background: radial-gradient(circle at 50% 55%, var(--wipe-accent, #fff) 0%, #000 80%);
+  background: #040406;
   opacity: 0;
   pointer-events: none;
 }
+
 
 /* ---------------------------------------------------------
    Site Navigation (Ultra-subtle, high-end editorial)

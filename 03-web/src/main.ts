@@ -83,16 +83,19 @@ function initDesktop() {
         }
       },
       (world: World) => {
-        wipe.style.setProperty("--wipe-accent", world.accent);
-        gsap.to(wipe, {
-          opacity: 1,
-          duration: 0.35,
-          ease: "power2.in",
-        });
+        if (wipe) {
+          wipe.style.background = "#040406";
+          gsap.to(wipe, {
+            opacity: 1,
+            duration: 0.55,
+            ease: "power2.inOut",
+          });
+        }
         window.setTimeout(() => {
           window.location.href = `collection.html?world=${world.slug}`;
-        }, 350);
+        }, 600);
       },
+
       canClearHover
     );
 
