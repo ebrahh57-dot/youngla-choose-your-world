@@ -1,4 +1,4 @@
-import{W as yi,a as hr}from"./worlds-DSMPgfLZ.js";function xi(o,e){for(var n=0;n<e.length;n++){var t=e[n];t.enumerable=t.enumerable||!1,t.configurable=!0,"value"in t&&(t.writable=!0),Object.defineProperty(o,t.key,t)}}function bi(o,e,n){return e&&xi(o.prototype,e),o}/*!
+import{W as yi,a as hr}from"./worlds-Da8N_v4A.js";function xi(o,e){for(var n=0;n<e.length;n++){var t=e[n];t.enumerable=t.enumerable||!1,t.configurable=!0,"value"in t&&(t.writable=!0),Object.defineProperty(o,t.key,t)}}function bi(o,e,n){return e&&xi(o.prototype,e),o}/*!
  * Observer 3.15.0
  * https://gsap.com
  *
