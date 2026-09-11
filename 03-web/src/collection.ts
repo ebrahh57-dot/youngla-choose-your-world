@@ -42,21 +42,30 @@ if (world && root && title && tagline) {
   if (badgeFranchise) badgeFranchise.textContent = world.franchise;
 
   if (mainImg) {
-    mainImg.src = world.assetUrl;
-    mainImg.alt = `${world.name} Collection`;
+    mainImg.src = world.garmentImgUrl;
+    mainImg.alt = `${world.garment} — ${world.name}`;
   }
 
-  // Populate Interactive Image Switcher (Installation vs Signature Garment)
+  // Populate Interactive Image Switcher (Signature Garment vs Lookbook vs Installation)
   const thumbRow = document.getElementById("thumb-row");
   if (thumbRow && world) {
+    const lookbookBtn = world.lookbookImgUrl
+      ? `
+      <button type="button" class="collection-thumb-btn" data-src="${world.lookbookImgUrl}" data-fit="cover">
+        <img src="${world.lookbookImgUrl}" alt="Lookbook" class="collection-thumb-img" />
+        <span class="collection-thumb-title">LOOKBOOK</span>
+      </button>`
+      : "";
+
     thumbRow.innerHTML = `
-      <button type="button" class="collection-thumb-btn is-active" data-src="${world.assetUrl}">
-        <img src="${world.assetUrl}" alt="Installation" class="collection-thumb-img" />
-        <span class="collection-thumb-title">INSTALLATION</span>
-      </button>
-      <button type="button" class="collection-thumb-btn" data-src="${world.garmentImgUrl}">
+      <button type="button" class="collection-thumb-btn is-active" data-src="${world.garmentImgUrl}" data-fit="contain">
         <img src="${world.garmentImgUrl}" alt="${world.garment}" class="collection-thumb-img" />
         <span class="collection-thumb-title">SIGNATURE PIECE</span>
+      </button>
+      ${lookbookBtn}
+      <button type="button" class="collection-thumb-btn" data-src="${world.assetUrl}" data-fit="cover">
+        <img src="${world.assetUrl}" alt="Installation" class="collection-thumb-img" />
+        <span class="collection-thumb-title">INSTALLATION</span>
       </button>
     `;
 
@@ -65,7 +74,21 @@ if (world && root && title && tagline) {
         thumbRow.querySelectorAll(".collection-thumb-btn").forEach((b) => b.classList.remove("is-active"));
         btn.classList.add("is-active");
         if (mainImg && btn.dataset.src) {
-          mainImg.src = btn.dataset.src;
+          gsap.killTweensOf(mainImg);
+          gsap.to(mainImg, {
+            opacity: 0,
+            duration: 0.15,
+            ease: "power2.in",
+            onComplete: () => {
+              mainImg.src = btn.dataset.src!;
+              if (btn.dataset.fit === "cover") {
+                mainImg.classList.remove("is-contain");
+              } else {
+                mainImg.classList.add("is-contain");
+              }
+              gsap.to(mainImg, { opacity: 1, duration: 0.25, ease: "power2.out" });
+            }
+          });
         }
       });
     });
