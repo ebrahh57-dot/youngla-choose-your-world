@@ -134,15 +134,15 @@ export const WORLDS: World[] = [
     name: "YOUNGLA ORIGINALS",
     franchise: "YOUNGLA ARCHIVES",
     tagline: "Discipline creates freedom. The architectural foundation.",
-    garment: "5222 GHOST 500 GSM HEAVYWEIGHT ZIP-UP",
+    garment: "5132 GOLDEN ERA VINTAGE ZIP-UP",
     garmentType: "jacket",
-    price: "$63",
-    description: "The architectural cornerstone of the YoungLA house line. Constructed from 500 GSM ultra-heavyweight cotton loopback terry with an oversized boxy cut, distressed vintage stone wash, dual-way heavy gunmetal zipper, and arched YoungLA heraldic gothic crest embroidery.",
+    price: "$72",
+    description: "Constructed from 390 GSM heavyweight loopback terry with distressed vintage stone wash, dual-way gunmetal zipper, and arched YoungLA Golden Era heraldic crest embroidery and high-density printing across the chest and back.",
     details: [
-      "500 GSM Ultra-Heavyweight 100% Cotton Terry",
-      "Arched YoungLA Heraldic Gothic crest chest embroidery",
+      "390 GSM Heavyweight 100% Cotton Terry",
+      "YoungLA Golden Era heraldic chest embroidery & back graphic",
+      "Raw edge distress detailing along hood and seams",
       "Two-way heavy-gauge oxidized metal zipper",
-      "Structured double-layer hood and seamless kangaroo pocket",
       "Architectural drop-shoulder boxy luxury cut"
     ],
     printTag: "ORIGINALS",
@@ -155,9 +155,9 @@ export const WORLDS: World[] = [
     garmentImgUrl: `${base}assets/garments/youngla_originals_garment.png`,
     lookbookImgUrl: `${base}assets/lookbook/youngla_originals_lookbook.jpg`,
     colors: [
-      { name: "Mineral Black Wash", hex: "#18181b" },
-      { name: "Brutalist Bone", hex: "#e2e8f0" },
-      { name: "Charcoal Concrete", hex: "#3f3f46" }
+      { name: "Black Wash", hex: "#18181b" },
+      { name: "Heather Grey", hex: "#64748b" },
+      { name: "Raw Concrete", hex: "#3f3f46" }
     ]
   },
   {
