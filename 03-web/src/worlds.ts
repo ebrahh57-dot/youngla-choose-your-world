@@ -260,5 +260,13 @@ export const WORLDS: World[] = [
 
 export function getWorldBySlug(slug: string | null): World | undefined {
   if (!slug) return undefined;
-  return WORLDS.find((w) => w.slug === slug || w.id === slug);
+  const s = slug.toLowerCase().trim();
+  return WORLDS.find((w) => 
+    w.slug === s || 
+    w.id === s || 
+    (s === "naruto" && w.id === "naruto-shippuden") || 
+    (s === "aot" && w.id === "attack-on-titan") || 
+    (s === "opm" && w.id === "one-punch-man")
+  );
 }
+
