@@ -1,4 +1,4 @@
-import{W as Ri,a as ue}from"./worlds-De2uRsnn.js";import{s as la}from"./main-BhPcHhAM.js";/**
+import{W as Ri,a as ue}from"./worlds-D32P4HSO.js";import{s as la}from"./main-CZg3G8fa.js";/**
  * @license
  * Copyright 2010-2024 Three.js Authors
  * SPDX-License-Identifier: MIT
