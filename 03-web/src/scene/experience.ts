@@ -12,45 +12,16 @@ export interface ExperienceHandles {
   enterWorldBySlug: (slug: string) => void;
 }
 
-function createGlowTexture(colorHex: string): THREE.CanvasTexture {
-  const canvas = document.createElement("canvas");
-  canvas.width = 256;
-  canvas.height = 256;
-  const ctx = canvas.getContext("2d")!;
-
-  const grad = ctx.createRadialGradient(128, 128, 10, 128, 128, 128);
-  grad.addColorStop(0, colorHex);
-  grad.addColorStop(0.35, colorHex);
-  grad.addColorStop(0.7, "rgba(0, 0, 0, 0.2)");
-  grad.addColorStop(1, "rgba(0, 0, 0, 0)");
-
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 256, 256);
-
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  return tex;
-}
-
-function createGroundPuddleTexture(colorHex: string): THREE.CanvasTexture {
-  const canvas = document.createElement("canvas");
-  canvas.width = 256;
-  canvas.height = 256;
-  const ctx = canvas.getContext("2d")!;
-
-  const grad = ctx.createRadialGradient(128, 128, 15, 128, 128, 120);
-  grad.addColorStop(0, colorHex);
-  grad.addColorStop(0.4, colorHex);
-  grad.addColorStop(0.8, "rgba(0, 0, 0, 0.2)");
-  grad.addColorStop(1, "rgba(0, 0, 0, 0)");
-
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 256, 256);
-
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  return tex;
-}
+// Sophisticated architectural studio light temperatures (not saturated neon / game UI)
+const ARCHITECTURAL_TINTS: Record<string, number> = {
+  batman: 0x9ec5ea,         // Nocturnal cool slate steel
+  "the-boys": 0xdd4b4b,     // Deep industrial crimson
+  "demon-slayer": 0x9f86c0, // Traditional indigo-violet wash
+  youngla: 0xfff6ea,        // Clean 3500K gallery spotlight
+  "attack-on-titan": 0x5a9e52, // Muted military olive-moss (photographic, not laser-green)
+  naruto: 0xd9822b,         // Warm amber lantern illumination
+  "one-punch-man": 0xdba832 // Architectural ochre gold
+};
 
 function createContactShadowTexture(isTight = false): THREE.CanvasTexture {
   const canvas = document.createElement("canvas");
@@ -58,16 +29,16 @@ function createContactShadowTexture(isTight = false): THREE.CanvasTexture {
   canvas.height = 128;
   const ctx = canvas.getContext("2d")!;
 
-  const grad = ctx.createRadialGradient(128, 64, isTight ? 5 : 15, 128, 64, isTight ? 85 : 124);
+  const grad = ctx.createRadialGradient(128, 64, isTight ? 4 : 14, 128, 64, isTight ? 80 : 124);
   if (isTight) {
     grad.addColorStop(0, "rgba(0, 0, 0, 0.95)");
-    grad.addColorStop(0.45, "rgba(0, 0, 0, 0.7)");
-    grad.addColorStop(0.8, "rgba(0, 0, 0, 0.2)");
+    grad.addColorStop(0.45, "rgba(0, 0, 0, 0.65)");
+    grad.addColorStop(0.8, "rgba(0, 0, 0, 0.18)");
     grad.addColorStop(1, "rgba(0, 0, 0, 0)");
   } else {
-    grad.addColorStop(0, "rgba(0, 0, 0, 0.65)");
-    grad.addColorStop(0.4, "rgba(0, 0, 0, 0.35)");
-    grad.addColorStop(0.75, "rgba(0, 0, 0, 0.1)");
+    grad.addColorStop(0, "rgba(0, 0, 0, 0.60)");
+    grad.addColorStop(0.4, "rgba(0, 0, 0, 0.30)");
+    grad.addColorStop(0.75, "rgba(0, 0, 0, 0.08)");
     grad.addColorStop(1, "rgba(0, 0, 0, 0)");
   }
 
@@ -86,9 +57,9 @@ function createSoftParticleTexture(): THREE.CanvasTexture {
   const ctx = canvas.getContext("2d")!;
 
   const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 30);
-  grad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
-  grad.addColorStop(0.25, "rgba(255, 255, 255, 0.5)");
-  grad.addColorStop(0.65, "rgba(255, 255, 255, 0.12)");
+  grad.addColorStop(0, "rgba(255, 255, 255, 0.9)");
+  grad.addColorStop(0.25, "rgba(255, 255, 255, 0.45)");
+  grad.addColorStop(0.65, "rgba(255, 255, 255, 0.1)");
   grad.addColorStop(1, "rgba(255, 255, 255, 0)");
 
   ctx.fillStyle = grad;
@@ -112,7 +83,7 @@ export function initExperience(
   // --- Three.js Scene & Camera Setup ---
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x040406); // Deepest nocturnal black
-  scene.fog = new THREE.FogExp2(0x040406, 0.018);
+  scene.fog = new THREE.FogExp2(0x040406, 0.016);
 
   const camera = new THREE.PerspectiveCamera(43, container.clientWidth / container.clientHeight, 0.1, 80);
   const BASE_CAM_Z = 7.6;
@@ -127,17 +98,17 @@ export function initExperience(
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.02;
+  renderer.toneMappingExposure = 1.0;
   container.appendChild(renderer.domElement);
 
-  // --- Post-Processing: Cinematic Bloom ---
+  // --- Post-Processing: Filmic Bloom (High threshold, subtle natural diffusion) ---
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
   const bloomPass = new UnrealBloomPass(
     new THREE.Vector2(container.clientWidth, container.clientHeight),
-    0.32, // Subtle, controlled luxury bloom
-    0.38, // Radius
-    0.86  // High threshold (only highlights neon & intense focal points)
+    0.20, // Subdued, luxury photographic bloom (never cloudy or video-gamey)
+    0.35, // Radius
+    0.88  // Catches only true emissive letterings
   );
   composer.addPass(bloomPass);
 
@@ -167,14 +138,14 @@ export function initExperience(
   }
   backdropGeo.computeVertexNormals();
 
-  // Standard material allows physical light response (ambient dimming on selection)
+  // Standard PBR material for physical light and shadow response
   const backdropMat = new THREE.MeshStandardMaterial({
     map: conceptTex,
     side: THREE.FrontSide,
     transparent: true,
     opacity: 0,
-    roughness: 0.78,
-    metalness: 0.12,
+    roughness: 0.82,
+    metalness: 0.10,
   });
   const backdropMesh = new THREE.Mesh(backdropGeo, backdropMat);
   backdropMesh.position.set(0, 0, 0);
@@ -188,7 +159,6 @@ export function initExperience(
   modelTex.generateMipmaps = true;
   disposableTextures.push(modelTex);
 
-  // Precision dimensions matching model height with statuesque presence
   const modelH = baseFrustumH * (370.0 / 576.0) * 1.03; // ~3.93
   const modelW = baseFrustumW * (125.0 / 1024.0) * 1.03; // ~1.33
   const modelBaseX = 0.005;
@@ -203,15 +173,14 @@ export function initExperience(
     map: modelTex,
     transparent: true,
     alphaTest: 0.02,
-    roughness: 0.6,
-    metalness: 0.15,
+    roughness: 0.62,
+    metalness: 0.12,
     opacity: 0,
   });
   const heroModelMesh = new THREE.Mesh(heroModelGeo, heroModelMat);
   heroModelGroup.add(heroModelMesh);
 
   // Multi-tier Ground Contact Shadow under model's sneakers
-  // 1. Tight Ambient Occlusion core under shoes
   const shadowTightTex = createContactShadowTexture(true);
   disposableTextures.push(shadowTightTex);
   const shadowTightGeo = new THREE.PlaneGeometry(modelW * 0.75, 0.26);
@@ -226,7 +195,6 @@ export function initExperience(
   shadowTightMesh.position.set(0, -modelH / 2 + 0.015, 0.03);
   heroModelGroup.add(shadowTightMesh);
 
-  // 2. Soft diffused floor contact reflection/penumbra
   const shadowSoftTex = createContactShadowTexture(false);
   disposableTextures.push(shadowSoftTex);
   const shadowSoftGeo = new THREE.PlaneGeometry(modelW * 1.12, 0.52);
@@ -244,16 +212,16 @@ export function initExperience(
   scene.add(heroModelGroup);
 
   // --- 3. Staged Editorial Lighting Rig ---
-  // Controlled ambient lighting (darkness is part of the design)
-  const ambientLight = new THREE.AmbientLight(0xdbeafe, 0.92);
+  // Ambient gallery light providing balanced visibility across all architecture
+  const ambientLight = new THREE.AmbientLight(0xdbeafe, 0.90);
   scene.add(ambientLight);
 
   // Subtle directional fill from high above
-  const directionalFill = new THREE.DirectionalLight(0xfff8f0, 0.35);
+  const directionalFill = new THREE.DirectionalLight(0xfff8f0, 0.32);
   directionalFill.position.set(0, 5, 5);
   scene.add(directionalFill);
 
-  // Overhead Studio Key Spotlight on Hero Model (Preserves photographic protagonist presence)
+  // Overhead Studio Key Spotlight on Hero Model
   const modelKeySpot = new THREE.SpotLight(0xfff7ee, 0, 11, Math.PI / 5, 0.65, 1.2);
   modelKeySpot.position.set(0.5, 2.6, 2.2);
   modelKeySpot.target = heroModelGroup;
@@ -265,17 +233,13 @@ export function initExperience(
   modelRimSpot.target = heroModelGroup;
   scene.add(modelRimSpot);
 
-  // --- 4. Collaboration World Physical Installations ---
+  // --- 4. Collaboration World Physical Installations (Physical Spotlights, Zero Fake Glow Forcefields) ---
   interface AlcoveRig {
     world: World;
     worldX: number;
     worldY: number;
     worldZ: number;
     hitPlane: THREE.Mesh;
-    glowMesh: THREE.Mesh;
-    glowMat: THREE.MeshBasicMaterial;
-    puddleMesh: THREE.Mesh;
-    puddleMat: THREE.MeshBasicMaterial;
     spotLight: THREE.SpotLight;
   }
 
@@ -292,39 +256,10 @@ export function initExperience(
     hitPlane.userData.slug = world.slug;
     scene.add(hitPlane);
 
-    // Volumetric Accent Glow (subtle atmospheric halo behind vitrine)
-    const glowTex = createGlowTexture(world.accent);
-    disposableTextures.push(glowTex);
-    const glowGeo = new THREE.PlaneGeometry(2.3, 3.5);
-    const glowMat = new THREE.MeshBasicMaterial({
-      map: glowTex,
-      transparent: true,
-      opacity: 0,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-    const glowMesh = new THREE.Mesh(glowGeo, glowMat);
-    glowMesh.position.set(worldX, worldY + 0.1, worldZ + 0.04);
-    scene.add(glowMesh);
-
-    // Floor Reflection Puddle in front of each vitrine
-    const puddleTex = createGroundPuddleTexture(world.accent);
-    disposableTextures.push(puddleTex);
-    const puddleGeo = new THREE.PlaneGeometry(1.6, 1.2);
-    const puddleMat = new THREE.MeshBasicMaterial({
-      map: puddleTex,
-      transparent: true,
-      opacity: 0,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    });
-    const puddleMesh = new THREE.Mesh(puddleGeo, puddleMat);
-    puddleMesh.rotation.x = -Math.PI / 2;
-    puddleMesh.position.set(worldX, -baseFrustumH * 0.28, worldZ + 0.5);
-    scene.add(puddleMesh);
-
     // Physical Directional Spotlight pointing down into the alcove
-    const spotLight = new THREE.SpotLight(new THREE.Color(world.accent), 0, 12, Math.PI / 4.8, 0.55, 1.2);
+    // Uses architectural studio light tints rather than raw oversaturated neons
+    const tintColor = ARCHITECTURAL_TINTS[world.slug] ?? 0xffffff;
+    const spotLight = new THREE.SpotLight(new THREE.Color(tintColor), 0, 12, Math.PI / 4.6, 0.75, 1.2);
     spotLight.position.set(worldX, 2.7, worldZ + 1.4);
     const targetObj = new THREE.Object3D();
     targetObj.position.set(worldX, worldY, worldZ);
@@ -338,16 +273,12 @@ export function initExperience(
       worldY,
       worldZ,
       hitPlane,
-      glowMesh,
-      glowMat,
-      puddleMesh,
-      puddleMat,
       spotLight,
     };
   });
 
   // --- 5. Soft Atmospheric Floating Air Motes (Ultra-subtle, organic circular discs) ---
-  const particleCount = 45; // Sparse, high-end atmosphere (not game pixels)
+  const particleCount = 35; // Sparse, high-end atmosphere
   const particleGeo = new THREE.BufferGeometry();
   const particlePositions = new Float32Array(particleCount * 3);
   let pIdx = 0;
@@ -356,7 +287,6 @@ export function initExperience(
     const py = (Math.random() - 0.5) * baseFrustumH * 0.85;
     const pz = Math.random() * 4.5 + 0.8;
 
-    // Reject particles that would overlap the hero model's face or body
     if (Math.abs(px) < 0.65 && py > -1.2 && py < 1.4) {
       continue;
     }
@@ -373,9 +303,9 @@ export function initExperience(
   const particleMat = new THREE.PointsMaterial({
     map: particleTex,
     color: 0xffffff,
-    size: 0.05,
+    size: 0.042,
     transparent: true,
-    opacity: 0.14, // Faint, natural motes in air
+    opacity: 0.11,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
   });
@@ -421,19 +351,19 @@ export function initExperience(
         });
       }
 
-      // 3. Dramatic environmental dimming: room recedes into darkness, chosen world dominates
+      // 3. Environmental contrast: rest of the building becomes quieter (0.52 preserves architectural legibility)
       gsap.to(ambientLight, {
-        intensity: 0.28,
+        intensity: 0.52,
         duration: 0.8,
         ease: "power2.out",
       });
       gsap.to(directionalFill, {
-        intensity: 0.08,
+        intensity: 0.16,
         duration: 0.8,
         ease: "power2.out",
       });
       gsap.to(modelKeySpot, {
-        intensity: 3.8, // Preserves crisp photographic highlight on hero model
+        intensity: 3.6,
         duration: 0.8,
         ease: "power2.out",
       });
@@ -456,12 +386,12 @@ export function initExperience(
 
       // Ambient light returns to pristine flagship visibility
       gsap.to(ambientLight, {
-        intensity: 0.92,
+        intensity: 0.90,
         duration: 0.8,
         ease: "power2.out",
       });
       gsap.to(directionalFill, {
-        intensity: 0.35,
+        intensity: 0.32,
         duration: 0.8,
         ease: "power2.out",
       });
@@ -472,21 +402,11 @@ export function initExperience(
       });
     }
 
-    // Illuminate target alcove spotlight, glow & floor reflection puddle
+    // Illuminate target alcove with practical architectural light
     alcoveRigs.forEach((rig) => {
       const isTarget = rig === hoveredRig;
       gsap.to(rig.spotLight, {
-        intensity: isTarget ? 5.8 : 0.12,
-        duration: 0.7,
-        ease: "power2.out",
-      });
-      gsap.to(rig.glowMat, {
-        opacity: isTarget ? 0.42 : 0,
-        duration: 0.7,
-        ease: "power2.out",
-      });
-      gsap.to(rig.puddleMat, {
-        opacity: isTarget ? 0.32 : 0,
+        intensity: isTarget ? 4.4 : 0.18,
         duration: 0.7,
         ease: "power2.out",
       });
@@ -554,12 +474,12 @@ export function initExperience(
       onUpdate: () => camera.updateProjectionMatrix(),
     });
     gsap.to(rig.spotLight, {
-      intensity: 14,
+      intensity: 12,
       duration: 0.65,
       ease: "power2.in",
     });
     gsap.to(bloomPass, {
-      strength: 2.2,
+      strength: 1.8,
       duration: 0.65,
       ease: "power2.in",
     });
@@ -605,21 +525,18 @@ export function initExperience(
   // --- 7. 6-Stage Cinematic Introduction Sequence ---
   const introTl = gsap.timeline({ delay: 0.2 });
 
-  // Stage 1: Architecture slowly reveals itself from darkness
   introTl.to(
     backdropMat,
     { opacity: 0.45, duration: 1.2, ease: "power2.out" },
     0.3
   );
 
-  // Stage 2: Environment becomes visible with full contrast
   introTl.to(
     backdropMat,
     { opacity: 1.0, duration: 1.2, ease: "power2.out" },
     1.4
   );
 
-  // Stage 3: Hero Model is revealed by key spotlight sweep
   introTl.to(
     heroModelMat,
     { opacity: 1.0, duration: 1.0, ease: "power2.out" },
@@ -646,11 +563,10 @@ export function initExperience(
     2.6
   );
 
-  // Stage 4: Collaboration Worlds begin to activate
   alcoveRigs.forEach((rig, idx) => {
     introTl.to(
       rig.spotLight,
-      { intensity: 0.12, duration: 0.8, ease: "power2.out" },
+      { intensity: 0.18, duration: 0.8, ease: "power2.out" },
       3.2 + idx * 0.08
     );
   });
@@ -662,7 +578,6 @@ export function initExperience(
   function tick() {
     const t = clock.getElapsedTime();
 
-    // Slow, disciplined breathing cycle
     if (!isTransitioning) {
       const breath = Math.sin(t * 1.1);
       heroModelMesh.position.y = breath * 0.005;
@@ -670,7 +585,6 @@ export function initExperience(
       heroModelMesh.scale.x = 1 - breath * 0.001;
     }
 
-    // Slow atmospheric particle drift
     const pos = particleGeo.attributes.position.array as Float32Array;
     for (let i = 0; i < particleCount; i++) {
       pos[i * 3 + 1] -= 0.0012;
@@ -685,7 +599,6 @@ export function initExperience(
   }
   tick();
 
-  // Responsive Object-fit: cover for WebGL
   function onResize() {
     const w = container.clientWidth;
     const h = container.clientHeight;
