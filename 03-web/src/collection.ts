@@ -201,15 +201,19 @@ addToCartBtn?.addEventListener("click", () => {
 updateCartBadge();
 
 // Disciplined, Restrained Cinematic Collection Reveal
-// Sequence: 1. Primary Image -> 2. Title -> 3. Product Info -> 4. Controls
+// Editorial Pacing:
+// 1. Image emerges: 0.15s – 0.60s (settling naturally from scale 1.025 to 1.0)
+// 2. Title & Brand typography: 0.35s – 0.80s
+// 3. Technical details & specs: 0.55s – 1.00s
+// 4. Controls (sizing, add to cart, thumbnails): 0.75s – 1.20s
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 if (!reduce) {
   // Set initial spatial states
-  gsap.set(".collection-main-frame", { opacity: 0, scale: 0.985 });
+  gsap.set(".collection-main-frame", { opacity: 0, scale: 1.025 });
   gsap.set([".collection-back-link", ".collection-eyebrow", ".collection-title", ".collection-tagline"], {
     opacity: 0,
-    y: 12,
+    y: 10,
   });
   gsap.set([".product-header", ".product-badge", "[data-description]", ".tech-specs-block"], {
     opacity: 0,
@@ -220,70 +224,70 @@ if (!reduce) {
     y: 8,
   });
 
-  const revealTl = gsap.timeline({ delay: 0.06 });
+  const revealTl = gsap.timeline({ delay: 0.04 });
 
-  // Phase 0: Wipe lifts from nocturnal threshold darkness
+  // Phase 0: Threshold darkness veil lifts
   if (wipe) {
     revealTl.to(
       wipe,
       {
         opacity: 0,
-        duration: 0.70,
+        duration: 0.45,
         ease: "power2.out",
       },
       0
     );
   }
 
-  // 1. Primary Image: emerges out of threshold darkness with photographic presence
+  // 1. Primary Image: emerges at 0.15s – 0.60s with photographic presence
   revealTl.to(
     ".collection-main-frame",
     {
       opacity: 1,
       scale: 1,
-      duration: 0.90,
+      duration: 0.55,
       ease: "power2.out",
     },
-    0.16
+    0.15
   );
 
-  // 2. Collection Title & Brand Framing
+  // 2. Collection Title & Brand Framing: 0.35s – 0.80s
   revealTl.to(
     [".collection-back-link", ".collection-eyebrow", ".collection-title", ".collection-tagline"],
     {
       opacity: 1,
       y: 0,
-      duration: 0.80,
-      stagger: 0.07,
+      duration: 0.50,
+      stagger: 0.06,
       ease: "power2.out",
     },
-    0.36
+    0.35
   );
 
-  // 3. Product Information: craftsmanship and specifications
+  // 3. Product Information: craftsmanship and specifications: 0.55s – 1.00s
   revealTl.to(
     [".product-header", ".product-badge", "[data-description]", ".tech-specs-block"],
     {
       opacity: 1,
       y: 0,
-      duration: 0.75,
-      stagger: 0.07,
+      duration: 0.50,
+      stagger: 0.06,
       ease: "power2.out",
     },
-    0.56
+    0.55
   );
 
-  // 4. Controls: purchase actions, sizing, colorway, and navigation
+  // 4. Controls: purchase actions, sizing, colorway, and navigation: 0.75s – 1.20s
   revealTl.to(
     [".selector-block", ".product-actions", ".collection-thumb-row", ".other-worlds-section"],
     {
       opacity: 1,
       y: 0,
-      duration: 0.70,
-      stagger: 0.07,
+      duration: 0.50,
+      stagger: 0.06,
       ease: "power2.out",
     },
-    0.76
+    0.75
   );
 } else if (wipe) {
   gsap.to(wipe, { opacity: 0, duration: 0.4 });

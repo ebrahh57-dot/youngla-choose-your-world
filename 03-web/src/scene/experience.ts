@@ -6,6 +6,8 @@ import gsap from "gsap";
 import { WORLDS, type World } from "../worlds";
 import { soundFX } from "./audio";
 
+(window as any).gsap = gsap;
+
 export interface ExperienceHandles {
   dispose: () => void;
   focusWorldBySlug: (slug: string) => void;
@@ -251,6 +253,8 @@ export function initExperience(
   const particles = new THREE.Points(particleGeo, particleMat);
   scene.add(particles);
 
+  (window as any).__EXP__ = { camera, camLookTarget, ambientLight, alcoveRigs, backdropMat, scene };
+
   // --- 5. Interaction: Spatial Camera Hover & Physical Orbital Approach ---
   const pointer = { x: 0, y: 0 };
   const pointerNDC = new THREE.Vector2();
@@ -272,11 +276,11 @@ export function initExperience(
 
       // ORBITAL SPATIAL CAMERA APPROACH:
       // Combines lateral displacement, perspective rotation, eye-level dip, and forward dolly.
-      // Approaches from Z=7.6 to Z=4.6 (stopping cleanly right in front of portal threshold)
+      // Heavy cinema camera inertia: 2.1s duration with power2.inOut curve
       if (!reduceMotion) {
         const targetX = hoveredRig.worldX * 0.58;
-        const targetY = BASE_CAM_Y - 0.05; // Human eye-level perspective dip
-        const targetZ = 4.6;
+        const targetY = BASE_CAM_Y - 0.04; // Human eye-level perspective dip
+        const targetZ = 4.4;
 
         gsap.killTweensOf(camera.position);
         gsap.killTweensOf(camLookTarget);
@@ -285,42 +289,42 @@ export function initExperience(
           x: targetX,
           y: targetY,
           z: targetZ,
-          duration: 1.6,
-          ease: "power2.out",
+          duration: 2.1,
+          ease: "power2.inOut",
         });
 
-        // Dynamic perspective rotation toward portal
+        // Dynamic 17.5° perspective rotation toward portal
         gsap.to(camLookTarget, {
-          x: hoveredRig.worldX * 0.86,
-          y: hoveredRig.worldY + 0.12,
+          x: hoveredRig.worldX * 0.88,
+          y: hoveredRig.worldY + 0.10,
           z: hoveredRig.worldZ,
-          duration: 1.6,
-          ease: "power2.out",
+          duration: 2.1,
+          ease: "power2.inOut",
         });
       }
 
       // Hierarchy: selected world gains architectural focus
       gsap.to(ambientLight, {
-        intensity: 0.55,
-        duration: 0.8,
+        intensity: 0.58,
+        duration: 1.4,
         ease: "power2.out",
       });
       gsap.to(ceilingLight, {
-        intensity: 0.25,
-        duration: 0.8,
+        intensity: 0.28,
+        duration: 1.4,
         ease: "power2.out",
       });
       gsap.to(modelKeyLight, {
-        intensity: 0.70,
-        duration: 0.8,
+        intensity: 0.85,
+        duration: 1.4,
         ease: "power2.out",
       });
 
       alcoveRigs.forEach((rig) => {
         const isTarget = rig === hoveredRig;
         gsap.to(rig.spotLight, {
-          intensity: isTarget ? 5.2 : 0.35, // Other worlds stay visible, quiet in peripheral vision
-          duration: 0.8,
+          intensity: isTarget ? 5.2 : 0.40, // Other worlds stay visible, quiet in peripheral vision
+          duration: 1.4,
           ease: "power2.out",
         });
       });
@@ -336,40 +340,40 @@ export function initExperience(
           x: pointer.x * 0.18,
           y: BASE_CAM_Y + pointer.y * 0.06,
           z: BASE_CAM_Z,
-          duration: 1.6,
-          ease: "power2.out",
+          duration: 2.0,
+          ease: "power2.inOut",
         });
 
         gsap.to(camLookTarget, {
           x: 0,
           y: 0.05,
           z: 0,
-          duration: 1.6,
-          ease: "power2.out",
+          duration: 2.0,
+          ease: "power2.inOut",
         });
       }
 
       // Ambient and directional return to full flagship visibility
       gsap.to(ambientLight, {
         intensity: 0.76,
-        duration: 0.8,
+        duration: 1.2,
         ease: "power2.out",
       });
       gsap.to(ceilingLight, {
         intensity: 0.45,
-        duration: 0.8,
+        duration: 1.2,
         ease: "power2.out",
       });
       gsap.to(modelKeyLight, {
         intensity: 1.35,
-        duration: 0.8,
+        duration: 1.2,
         ease: "power2.out",
       });
 
       alcoveRigs.forEach((rig) => {
         gsap.to(rig.spotLight, {
           intensity: 0.55,
-          duration: 0.8,
+          duration: 1.2,
           ease: "power2.out",
         });
       });
@@ -422,14 +426,17 @@ export function initExperience(
     soundFX.playEnter();
     container.style.cursor = "default";
 
-    // Inform UI to immediately dismiss text HUD so viewer experiences pure architecture
+    // Inform UI to immediately dismiss text HUD (0.2s) so viewer experiences pure architecture
     onWorldStartEnter?.(rig.world);
 
-    // Camera physically charges forward through the portal threshold:
-    // Moves right into the portal opening (Z = 0.25), scaling portal to dominate entire frame
-    const targetX = rig.worldX * 0.96;
-    const targetY = rig.worldY + 0.08;
-    const targetZ = 0.25;
+    // PHYSICAL ARCHITECTURAL THRESHOLD FLY-THROUGH:
+    // Camera dollies forward directly into the portal opening.
+    // Target Z penetrates past the portal threshold plane into the dark void.
+    // The architectural portal frame expands past the viewport edges, and the dark doorway
+    // naturally engulfs the entire screen — the physical architecture becomes the wipe.
+    const targetX = rig.worldX;
+    const targetY = rig.worldY;
+    const targetZ = rig.worldZ + 0.08;
 
     gsap.killTweensOf(camera.position);
     gsap.killTweensOf(camLookTarget);
@@ -438,49 +445,59 @@ export function initExperience(
       x: targetX,
       y: targetY,
       z: targetZ,
-      duration: 1.15,
-      ease: "power3.in",
+      duration: 1.10,
+      ease: "power2.in",
     });
 
     gsap.to(camLookTarget, {
       x: rig.worldX,
-      y: rig.worldY + 0.05,
-      z: rig.worldZ - 3.0,
-      duration: 1.15,
-      ease: "power3.in",
-    });
-
-    // Portal spotlight intensifies as camera approaches, highlighting threshold relief
-    gsap.to(rig.spotLight, {
-      intensity: 6.8,
-      duration: 0.75,
-      ease: "power2.out",
-    });
-
-    // Ambient gallery light softens to 0.22 so the portal remains legible as it fills the frame
-    gsap.to(ambientLight, {
-      intensity: 0.22,
-      duration: 0.75,
-      ease: "power2.out",
-    });
-
-    // Rotunda directional and signage lights fade behind camera
-    gsap.to([ceilingLight, signLight, signDownwash, modelKeyLight, modelRimLight], {
-      intensity: 0.0,
-      duration: 0.75,
+      y: rig.worldY,
+      z: rig.worldZ,
+      duration: 1.10,
       ease: "power2.in",
     });
 
-    // Subdued, photographic bloom
-    gsap.to(bloomPass, {
-      strength: 0.16,
-      duration: 0.6,
+    // 3. Portal spotlight stays intense during flight, highlighting architectural threshold relief as camera approaches
+    gsap.to(rig.spotLight, {
+      intensity: 6.2,
+      duration: 0.60,
+      ease: "power2.out",
     });
 
-    // At T = 750ms, camera reaches the threshold doorway: trigger handoff to wipe & navigation
+    // 4. Lights only fade behind the camera as the camera penetrates into the threshold interior (T >= 0.75s)
+    const fadeDelay = 0.75;
+    gsap.to(rig.spotLight, {
+      intensity: 0.0,
+      duration: 0.30,
+      delay: fadeDelay,
+      ease: "power2.in",
+    });
+
+    gsap.to(ambientLight, {
+      intensity: 0.0,
+      duration: 0.30,
+      delay: fadeDelay,
+      ease: "power2.in",
+    });
+
+    gsap.to([ceilingLight, signLight, signDownwash, modelKeyLight, modelRimLight, floorBounce], {
+      intensity: 0.0,
+      duration: 0.45,
+      delay: 0.35,
+      ease: "power2.in",
+    });
+
+    gsap.to(bloomPass, {
+      strength: 0.0,
+      duration: 0.30,
+      delay: fadeDelay,
+    });
+
+    // At T = 1050ms, camera has physically penetrated into the dark threshold doorway interior.
+    // The screen is 100% #040406 naturally from the 3D scene. Handoff to collection page.
     window.setTimeout(() => {
       onWorldEnter(rig.world);
-    }, 750);
+    }, 1050);
   }
 
   function onClick() {

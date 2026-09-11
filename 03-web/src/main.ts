@@ -7,7 +7,6 @@ const DESKTOP_QUERY = "(min-width: 861px)";
 const loader = document.getElementById("loader")!;
 const loaderFill = document.getElementById("loader-fill")!;
 const nav = document.querySelector<HTMLElement>("[data-nav]")!;
-const wipe = document.getElementById("wipe")!;
 const soundBtn = document.getElementById("sound-btn");
 
 function runLoader(onDone: () => void) {
@@ -83,26 +82,20 @@ function initDesktop() {
         }
       },
       (world: World) => {
-        if (wipe) {
-          wipe.style.background = "#040406";
-          gsap.to(wipe, {
-            opacity: 1,
-            duration: 0.40,
-            ease: "power2.in",
-            onComplete: () => {
-              window.location.href = `collection.html?world=${world.slug}`;
-            }
-          });
-        } else {
-          window.location.href = `collection.html?world=${world.slug}`;
+        // Physical threshold fly-through complete: 3D viewport is naturally in #040406 threshold void.
+        // Handoff to collection page directly without any artificial overlay wipe.
+        if ((window as any).__DISABLE_NAV__) {
+          (window as any).__NAV_CALLED__ = true;
+          return;
         }
+        window.location.href = `collection.html?world=${world.slug}`;
       },
       canClearHover,
       (_world: World) => {
-        // Immediate UI dismiss on click: lets viewer experience physical architectural portal fly-through
-        gsap.to([editorialOverlay, flagshipPrompt, worldBar], {
+        // Immediate UI dissolve (0.20s): leaves only pure physical 3D architecture for the fly-through
+        gsap.to([editorialOverlay, flagshipPrompt, worldBar, nav], {
           opacity: 0,
-          duration: 0.25,
+          duration: 0.20,
           ease: "power2.out",
           overwrite: "auto"
         });
